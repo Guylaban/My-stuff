@@ -16,8 +16,8 @@ the standard expected of an assessment tool.
 Language and vision-language models are used to infer what a robot cannot
 sense directly: emotion from a face or a transcript, engagement from video,
 intent from an ambiguous request, wellbeing from a child's narrative. This is
-classification or scoring, and the email-thread intuition that it ``looks like
-evaluating a classification model'' is right, with three qualifications that
+classification or scoring, and the intuition that evaluating it looks like
+evaluating a classification model is right, with three qualifications that
 the affective-computing and psychometric literatures supply.
 
 First, the reference labels are themselves judgements. For affect,
@@ -168,9 +168,9 @@ in incompatible ways across papers \cite{howcroft2020twenty}. For a robot
 the rubric needs four further criteria that text-only evaluation omits.
 
 \emph{Embodied grounding.} Does the utterance cohere with what the robot can
-perceive and do? LLM-driven robots claim to see what they cannot see, promise
-actions they cannot take, and refer to shared experiences that never
-happened \cite{irfan2025between,ashok2026why}. This is hallucination in the
+perceive and do? LLM-driven robots can claim capabilities they lack
+\cite{ashok2026why}, and they hallucinate and offer outdated information in
+conversation \cite{irfan2025between}. This is hallucination in the
 NLP sense \cite{ji2023survey}, but its reference is the robot's own body and
 history, which no general-purpose factuality metric checks.
 

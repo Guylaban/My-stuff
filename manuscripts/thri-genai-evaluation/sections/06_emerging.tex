@@ -1,7 +1,7 @@
 \section{Emerging Practices}
 \label{sec:emerging}
 
-The practices above adapt established methods. This section describes eight
+The practices above adapt established methods. This section describes nine
 that are newer: some were published in the last two years, some have been
 tried first in HRI, and some are proposals that follow from the framework and
 have not, to our knowledge, been tested. We state for each what it can
@@ -197,17 +197,17 @@ as should members of the population itself where that is feasible.
 
 A robot's character is part of its design, and with a language model it is
 specified in a prompt and maintained, or not, by the model across a
-conversation. HRI experts consulted on prompt design identified legibility
-of the robot's personality, users' ability to adapt it, and safety,
-deception, and governance as their main concerns, and unexplained change of
-personality mid-interaction as a characteristic failure \cite{ashok2026why}.
+conversation. HRI experts consulted on prompt design identified the
+legibility of the robot's personality, users' ability to adapt it, and
+safety, deception, and governance as their main concerns \cite{ashok2026why}.
 Stability can be measured. Probes of the persona's stated traits, knowledge,
 and boundaries are inserted at intervals in long simulated or replayed
 conversations, and the consistency of the answers is scored; the same
 conversations show whether the robot's account of its own nature and
-capabilities stays truthful. Work on multi-turn simulation shows that drift
-grows with conversation length and that how the conversation history is
-presented to the model strongly affects it \cite{luo2026spasm}, which implies
+capabilities stays truthful. Work on multi-turn simulation shows that persona drift and echoing between
+agents arise in long generated dialogues and that how the conversation
+history is presented to each agent substantially affects them
+\cite{luo2026spasm}, which implies
 that persona stability is a property of the whole configuration and has to
 be tested at the conversation lengths that the deployment will reach. We
 caution against measuring a robot's ``personality'' by administering human
