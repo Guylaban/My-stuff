@@ -76,7 +76,7 @@ on four checks.
 space. Contextual embedding spaces are anisotropic, so that even unrelated
 texts have high cosine similarity in some models
 \cite{ethayarajh2019how}, whereas models trained with a sentence-similarity
-objective spread texts more widely \cite{reimers2019sentence}. The same pairs
+objective spread texts more widely \cite{reimers2019sentencebert}. The same pairs
 of disclosures were found to have mean similarity below .50 in one family and
 above .80 in two others \cite{chiang2025selfdisclosure}. Conclusions should
 therefore be reported for at least two embedding families, and those that
@@ -194,7 +194,13 @@ perceive and do? LLM-driven robots can claim capabilities they lack
 \cite{ashok2026why}, and they hallucinate and offer outdated information in
 conversation \cite{irfan2025between}. This is hallucination in the
 NLP sense \cite{ji2023survey}, but its reference is the robot's own body and
-history, which no general-purpose factuality metric checks.
+history. Automatic factuality methods check generated claims against an
+external knowledge source \cite{min2023factscore} or against the model's
+own consistency across samples
+\cite{manakul2023selfcheckgpt,farquhar2024detecting}; none has access to
+what this robot can do or what happened in its last session, so embodied
+grounding needs raters who know the platform, or a judge given an explicit
+description of it.
 
 \emph{Persona consistency.} Does the robot remain the character it was
 designed to be, across turns and sessions? Drift of persona is a known
@@ -406,7 +412,7 @@ for downstream regression \cite{egami2023using}, procedures that route
 items to human coders according to the model's confidence
 \cite{gligoric2025can}, and corrections for a judge's imperfect sensitivity
 and specificity estimated from a human-labelled calibration set
-\cite{lee2025how}. They suit HRI's typical situation of a few hundred to
+\cite{lee2026how}. They suit HRI's typical situation of a few hundred to
 a few thousand items of which a subset can be double-coded. At the least, the
 main analysis should be repeated on the human-coded subset alone and any
 divergence reported.
@@ -436,10 +442,17 @@ reference matters as well: where several ratings of an item are defensible,
 forcing human raters to choose one biases the validation, and selecting
 judges against such labels picked judges that performed markedly worse than
 those selected against ratings that allowed a set of acceptable answers
-\cite{guerdan2025validating}. For multimodal
+\cite{guerdan2025validating}. A reference answer or an expert-written exemplar
+should be supplied wherever one exists, since judges without references
+agree with experts mainly where they could have answered correctly
+themselves \cite{krumdick2026no}. For multimodal
 material, vision-language judges have been found to track human preferences
 in pairwise comparison better than in absolute scoring
-\cite{chen2024mllm}, which favours comparative designs.
+\cite{chen2024mllmasajudge}, which favours comparative designs, and to neglect one
+modality and change their verdicts under semantically irrelevant
+perturbations of the image or text \cite{lee2026mmjudgebias}, which is the
+failure to probe before a model is trusted to judge video of a robot and a
+person.
 
 An evaluation of multi-agent judging for psychosocial safety is instructive
 about trade-offs. Against human safety annotations, a pipeline in which a
@@ -493,4 +506,10 @@ simulation suffers from persona drift and from agents echoing each other, and
 methods that address this have been evaluated with human validation
 \cite{luo2026spasm}. What is found in simulation is a hypothesis about what
 will happen with people, to be tested with people, and should be reported as
-such.
+such. The caution is empirical. When a benchmark of tool-using agents was
+run with 451 real users in place of simulated ones, the simulated users
+proved excessively cooperative and stylistically uniform, never frustrated
+or ambiguous, and they inflated the agents' measured success
+\cite{zhou2026mind}; and the choice of simulator model alone moved agent
+success by up to nine percentage points and represented some populations of
+speakers worse than others \cite{seshadri2026lost}.

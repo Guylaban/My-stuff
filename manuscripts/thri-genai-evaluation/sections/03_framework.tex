@@ -151,6 +151,17 @@ reports; subgroup differences in benefit and harm \\
 \end{tabularx}
 \end{table}
 
+The levels have precedents in AI evaluation generally. A sociotechnical
+framework for the safety evaluation of generative AI distinguishes
+evaluation of capability, of human interaction, and of systemic impact, on
+the ground that context determines whether a capability causes harm
+\cite{weidinger2023sociotechnical}; others have argued that model
+evaluation should be judged by how far it narrows the gap to what people
+need in use \cite{liao2023rethinking}, and that harms which emerge over
+sustained interaction are invisible to static tests
+\cite{ibrahim2025towards}. What HRI adds is the system level, because a
+robot interposes sensors, a body, and real time between model and person.
+
 The central principle is that \emph{evidence does not transfer between levels
 without an argument}. Two inferential errors follow from ignoring it, and both
 are common.
@@ -162,7 +173,17 @@ prompted at a desk, is assumed to be adequate when embodied in a robot,
 addressed in noisy speech by an older adult, and constrained to answer within
 a conversational pause. Benchmarks rarely sample that context, and the
 system-level properties that decide whether an interaction succeeds, such as
-latency and error propagation, are not properties of the model at all.
+latency and error propagation, are not properties of the model at all. The
+evidence against the leap is direct. In text interaction, better
+non-interactive performance of a language model did not reliably mean
+better human--model interaction across five tasks
+\cite{lee2023evaluating}, and a model's accuracy alone on benchmark
+questions failed to predict the accuracy of people working with it on the
+same questions \cite{chang2025chatbench}. In HRI, the same language model
+reached through a text interface, a voice interface, and a robot produced
+significantly different numbers of failures, with the fewest in text and
+the most in voice \cite{kim2024understanding}: the channel changed what the
+model did.
 
 The \emph{downward leap} takes interaction-level evidence as support for
 component-level adequacy. Participants rated the robot as empathic,
@@ -172,7 +193,10 @@ placed to detect the errors that matter most. A fluent, confident, incorrect
 answer is by construction one that the listener does not recognise as
 incorrect. Favourable questionnaire scores are compatible with a robot that
 fabricated facts, overstated its capabilities, or gave advice a professional
-would not have given. Only an audit of the outputs that participants actually
+would not have given. Studies of human feedback on language-model output
+find accordingly that preference ratings under-represent factuality and that
+more assertive outputs are perceived as containing fewer factual errors
+\cite{hosking2024human}. Only an audit of the outputs that participants actually
 received can establish what they received.
 
 \subsection{Five Kinds of Claim}

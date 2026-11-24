@@ -43,8 +43,8 @@ models are withdrawn, which makes exact replication impossible and is a
 principal argument for justifying any reliance on proprietary models in
 research \cite{palmer2024using,ollion2024dangers,rogers2023closed}. And
 outputs are sensitive to prompt details that authors regard as incidental:
-changes of formatting alone, with content held constant, can move task
-performance by tens of percentage points \cite{sclar2024quantifying}.
+changes of formatting alone, with meaning held constant, moved one model's
+accuracy by as much as 76 points \cite{sclar2024quantifying}.
 
 For robots, the configuration extends beyond the model. The system prompt
 usually carries the robot's persona, its stated capabilities, and its
@@ -73,8 +73,9 @@ Psychometrics holds that reliability bounds validity: an instrument that does
 not agree with itself cannot agree with anything else. A human coder is asked
 to demonstrate intra-rater reliability by coding the same material twice. The
 same should be asked of a model, and it frequently is not. Generative models
-are stochastic by default, and setting the temperature to zero does not
-guarantee identical outputs across calls \cite{atil2024nondeterminism}.
+are stochastic by default, and configuring a hosted model to be
+deterministic does not make it so: across ten runs of five such models,
+accuracy varied by up to 15\% \cite{atil2025nondeterminism}.
 Repeated classification of identical texts by the same model with the same
 prompt can fall below conventional reliability thresholds
 \cite{reiss2023testing}, model judges asked to rate the same output
@@ -94,8 +95,14 @@ required of human coders. For a model that generates (\role{4}, \role{5}),
 consistency concerns properties and not surface form: across repeated
 generations from the same context, how often does the response satisfy each
 criterion of the rubric, and how often does it contain a serious error? For a
-model that acts (\role{6}), it is the repeatability of outcomes from nominally
-identical initial conditions. Where the study's conclusion depends on a
+model that decides or acts (\role{3}, \role{6}), it is the repeatability of
+outcomes from nominally identical initial conditions. Agent benchmarks have
+begun to report this as a quantity in its own right, the probability that a
+task is completed on all of $k$ independent attempts, and find it far below
+single-attempt success \cite{yao2025taubench}; gains in capability across
+model generations have brought only small gains in reliability so defined
+\cite{rabanser2026towards}. For a robot that someone will rely on daily,
+succeeding every time is the property of interest. Where the study's conclusion depends on a
 prompt, at least a small set of meaning-preserving variants should be tested
 and the spread reported. Section~\ref{sec:gtheory} describes a design that
 estimates these sources of variance jointly.
@@ -113,11 +120,16 @@ Human judgement is the reference for almost everything HRI wishes to know
 about a model's outputs, and it is only as good as its reliability. Reviews
 of human evaluation in natural language generation document how often this
 is neglected: studies omit the number of raters, their expertise, the
-question they were asked, and any measure of agreement, and use quality
-criteria whose names do not correspond to shared definitions
-\cite{vanderlee2021human,howcroft2020twenty}; attempts to reproduce published
-human evaluations have been frustrated by missing detail
-\cite{belz2023missing}. Neighbouring fields are little better: in a sample
+question they were asked, and any measure of agreement
+\cite{vanderlee2021human}. An annotation of 165 NLG papers found more than
+200 different terms for the quality aspects being evaluated
+\cite{howcroft2020twenty}, which later work has tried to consolidate into a
+standard set of named and defined criteria \cite{belz2025standard}; a review
+of 135 papers found that most reported agreement fell short of conventional
+thresholds \cite{amidei2019agreement}; and when published human evaluations
+were selected for reproduction, only 13\% provided enough information to
+attempt it, and flaws were found in nearly all that were attempted
+\cite{belz2023missing,thomson2024common}. Neighbouring fields are little better: in a sample
 of qualitative papers from CSCW and HCI venues, inter-rater reliability was
 reported in about one in nine \cite{mcdonald2019reliability}. HRI, which has
 a long practice of behavioural coding, is well placed to do better, but the
@@ -128,7 +140,7 @@ summarises the choice. Percentage agreement should not be reported alone
 because it does not correct for chance \cite{cohen1960coefficient,
 hallgren2012computing}. Krippendorff's $\alpha$ handles any number of raters,
 missing ratings, and nominal to ratio data, and is the most generally
-applicable single choice \cite{hayes2007answering,krippendorff2018content}.
+applicable single choice \cite{hayes2007answering,krippendorff2019content}.
 For continuous ratings the intraclass correlation is appropriate, provided
 the model (one-way or two-way, random or mixed), the type (consistency or
 absolute agreement), and the unit (single or average rating) are stated,
@@ -176,7 +188,7 @@ authors as arbitrary conveniences \cite{landis1977measurement}, and
 Krippendorff's often-cited guidance to rely on variables with
 $\alpha\geq.800$ and to draw only tentative conclusions from those between
 .667 and .800 was offered for content analysis in general
-\cite{krippendorff2018content}. Neither is a pass mark, and for subjective
+\cite{krippendorff2019content}. Neither is a pass mark, and for subjective
 judgements a fixed threshold is hard to defend at all; an alternative is to
 benchmark agreement against a replication of the human rating itself
 \cite{wong2021crossreplication}. What matters is the
@@ -246,7 +258,7 @@ and none reached the level of agreement among humans, and judges with high
 percentage agreement still assigned very different scores
 \cite{thakur2025judging}. Without a correct reference answer, judges agreed
 with experts mainly on the questions they could answer themselves
-\cite{krumdick2025no}. Judges also have systematic biases, including
+\cite{krumdick2026no}. Judges also have systematic biases, including
 sensitivity to the order in which candidates are presented
 \cite{wang2024large}, a preference for text produced by the judging model
 itself \cite{panickssery2024llm}, and a range of other cognitive-bias
@@ -285,9 +297,11 @@ required, and analyse nested data as nested.
 Component-level results in HRI papers are frequently single numbers from
 small samples. The statistical literatures of both NLP and robot learning have
 argued at length that this is inadequate: significance testing and power
-analysis are underused in NLP \cite{dror2018hitchhiker,card2020little}, model
+analysis are underused in NLP \cite{dror2018hitchhikers,card2020with}, model
 evaluations are experiments whose results need standard errors
-\cite{miller2024adding}, and reports of robot policy performance from a
+\cite{miller2024adding}, error bars based on the central limit theorem
+understate uncertainty for evaluation sets of fewer than a few hundred items
+\cite{bowyer2025position}, and reports of robot policy performance from a
 handful of trials do not support the comparisons drawn from them
 \cite{kressgazit2024robot,agarwal2021deep}. Table~\ref{tab:cp} in the Appendix
 makes the last point concrete.
@@ -369,7 +383,7 @@ desk before the study are not the outputs participants heard. A generative
 model makes every participant's interaction different; the audit is the only
 means of knowing what the ``treatment'' was. It also supplies the
 manipulation check that experimental method requires
-\cite{hoffman2020primer}: if two conditions differ in a prompt intended to
+\cite{hoffman2021primer}: if two conditions differ in a prompt intended to
 make the robot more empathic, the audit should show that raters blind to
 condition find its utterances more empathic.
 
@@ -408,7 +422,7 @@ The prompt can be reworded, the model swapped, the temperature changed, the
 rubric adjusted, the judge replaced, each change producing a somewhat
 different result. The lesson of the replication crisis in psychology is that
 undisclosed flexibility of this kind reliably produces false positives
-\cite{simmons2011false}. The same has now been shown for model
+\cite{simmons2011falsepositive}. The same has now been shown for model
 configurations. In a replication of 37 annotation tasks from 21 social
 science studies, using 18 models and some 13 million labels, the choice
 among defensible configurations led to incorrect conclusions for roughly a
