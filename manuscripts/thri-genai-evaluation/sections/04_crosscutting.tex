@@ -77,8 +77,13 @@ are stochastic by default, and setting the temperature to zero does not
 guarantee identical outputs across calls \cite{atil2024nondeterminism}.
 Repeated classification of identical texts by the same model with the same
 prompt can fall below conventional reliability thresholds
-\cite{reiss2023testing}, and conclusions drawn from a single prompt often do
-not survive paraphrase of the instruction \cite{mizrahi2024state}.
+\cite{reiss2023testing}, model judges asked to rate the same output
+repeatedly have shown low intra-rater reliability, in the worst case close to
+arbitrary \cite{haldar2025rating,schroeder2024can}, and conclusions drawn
+from a single prompt often do not survive paraphrase of the instruction: in
+an evaluation of twenty models on thirty-nine tasks, paraphrasing the
+instruction changed both absolute and relative performance
+\cite{mizrahi2024state}.
 
 In practice this means, for a model that labels or scores (\role{1},
 \role{7}, \role{8}), running each item several times and reporting the
@@ -112,9 +117,11 @@ question they were asked, and any measure of agreement, and use quality
 criteria whose names do not correspond to shared definitions
 \cite{vanderlee2021human,howcroft2020twenty}; attempts to reproduce published
 human evaluations have been frustrated by missing detail
-\cite{belz2023missing}. HRI, which has a long practice of behavioural coding,
-is well placed to do better, but the practice needs adapting in four
-respects.
+\cite{belz2023missing}. Neighbouring fields are little better: in a sample
+of qualitative papers from CSCW and HCI venues, inter-rater reliability was
+reported in about one in nine \cite{mcdonald2019reliability}. HRI, which has
+a long practice of behavioural coding, is well placed to do better, but the
+practice needs adapting in four respects.
 
 \paragraph{Choose the coefficient to fit the data.} Table~\ref{tab:irr}
 summarises the choice. Percentage agreement should not be reported alone
@@ -169,7 +176,10 @@ authors as arbitrary conveniences \cite{landis1977measurement}, and
 Krippendorff's often-cited guidance to rely on variables with
 $\alpha\geq.800$ and to draw only tentative conclusions from those between
 .667 and .800 was offered for content analysis in general
-\cite{krippendorff2018content}. Neither is a pass mark. What matters is the
+\cite{krippendorff2018content}. Neither is a pass mark, and for subjective
+judgements a fixed threshold is hard to defend at all; an alternative is to
+benchmark agreement against a replication of the human rating itself
+\cite{wong2021crossreplication}. What matters is the
 consequence of the residual disagreement for the use to which the ratings are
 put, and for that the confidence interval is as important as the point
 estimate. Table~\ref{tab:kappa} in the Appendix shows that with a hundred
@@ -230,18 +240,36 @@ comparable to agreement between humans \cite{zheng2023judging,chiang2023can}.
 But the evidence for them is uneven across tasks: a study spanning twenty NLP
 datasets found large variation in how well model judgements tracked human
 ones and concluded that judges need to be validated for each task before use
-\cite{bavaresco2025llms}. Judges also have systematic biases, including
+\cite{bavaresco2025llms}. Even where humans agree strongly with one
+another, only the best of thirteen judge models aligned reasonably with them
+and none reached the level of agreement among humans, and judges with high
+percentage agreement still assigned very different scores
+\cite{thakur2025judging}. Without a correct reference answer, judges agreed
+with experts mainly on the questions they could answer themselves
+\cite{krumdick2025no}. Judges also have systematic biases, including
 sensitivity to the order in which candidates are presented
 \cite{wang2024large}, a preference for text produced by the judging model
 itself \cite{panickssery2024llm}, and a range of other cognitive-bias
 analogues \cite{koo2024benchmarking}.
 
-None of the published validations covers the constructs that HRI most often
-asks a judge to score, such as social appropriateness in a physical context,
-fidelity to a therapeutic technique, or consistency between an utterance and
-what the robot's body is doing, nor the inputs HRI most often supplies, such
-as transcripts of recognised speech with errors, or video of a robot and a
-person. A judge's validity is specific to the construct, the rubric, the
+Validation on HRI material has only begun, and what there is counsels
+caution. When language models were asked to reproduce participants'
+responses in three published HRI user studies, the strongest model
+correlated highly with people in two of them and no model did in the third;
+vision-capable models failed on the video stimuli; and models rated robot
+behaviour more favourably than people had \cite{wachowiak2024are}. When
+models completed standard HRI questionnaires for a set of recorded
+interactions, they agreed moderately to strongly with human observers on
+engagement and were highly consistent from run to run, yet their ratings of
+comfort and strangeness were \emph{inversely} related to those of people
+\cite{lockwood2026when}. The second result deserves emphasis because it
+separates two things that are easily conflated: the models were reliable,
+and on that dimension they were wrong. The constructs that HRI most often
+asks a judge to score (social appropriateness in a physical context,
+fidelity to a therapeutic technique, consistency between an utterance and
+what the robot's body is doing) and the inputs it most often supplies
+(transcripts of recognised speech with errors, video of a robot and a
+person) remain largely unvalidated. A judge's validity is specific to the construct, the rubric, the
 prompt, and the kind of material. It has to be established locally, on the
 study's own data, with the study's own rubric, and the role-specific
 practices for Annotators and Judges (\bpr{bp:coder}, \bpr{bp:judge}) say how.
@@ -380,9 +408,19 @@ The prompt can be reworded, the model swapped, the temperature changed, the
 rubric adjusted, the judge replaced, each change producing a somewhat
 different result. The lesson of the replication crisis in psychology is that
 undisclosed flexibility of this kind reliably produces false positives
-\cite{simmons2011false}, and a large-scale replication exercise has shown
-that the choice among defensible LLM annotation configurations can by itself
-flip the conclusions of downstream analyses \cite{baumann2025large}.
+\cite{simmons2011false}. The same has now been shown for model
+configurations. In a replication of 37 annotation tasks from 21 social
+science studies, using 18 models and some 13 million labels, the choice
+among defensible configurations led to incorrect conclusions for roughly a
+third of hypotheses even with state-of-the-art models, and a few
+paraphrases of the prompt were enough to make almost any result significant
+\cite{baumann2025large}. Re-running one published use of simulated
+respondents under 66 defensible configurations moved its correlation with
+human data from .23 to .84 \cite{cummins2026threat}. Reporting results
+across the set of reasonable prompts, models, and decoding settings, as a
+multiverse or specification curve
+\cite{steegen2016increasing,simonsohn2020specification}, is the transparent
+alternative to reporting the configuration that happened to work.
 Pre-registration, the remedy psychology adopted \cite{nosek2018preregistration},
 transfers directly: the prompt, the model, the rubric, the validation sample,
 and the agreement threshold can be fixed and time-stamped before the model is

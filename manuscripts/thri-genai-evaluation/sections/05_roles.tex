@@ -41,7 +41,11 @@ component, such as valence and arousal values computed from facial
 expressions and passed to a language model as numbers \cite{mehra2025how}.
 Each arrangement has a different error profile, and the evaluation should be
 of the arrangement used on the robot, with the robot's sensors, viewpoint,
-and lighting, and not of the model on a curated benchmark.
+and lighting, and not of the model on a curated benchmark. The gap can be
+large: multimodal models rating emotional arousal from video approached
+human-level reliability on laboratory recordings but correlated at best
+moderately with human ratings of real-world footage, and showed
+gender-differential bias \cite{licht2025computational}.
 
 When a Perceiver's output is used to draw conclusions about an individual
 (screening, assessment, adaptation of an intervention), the relevant standard
@@ -336,9 +340,18 @@ and cannot be assumed, so every application requires validation against
 human-coded data from the same corpus
 \cite{pangakis2023automated,tornberg2024best}. For deductive qualitative
 coding, combining an expert-developed codebook with a language model has
-produced fair to substantial agreement with experts \cite{xiao2023supporting},
-and the codebook, as much as the model, determines the result
-\cite{dunivin2024scalable}.
+produced fair to substantial agreement with experts \cite{xiao2023supporting};
+agreement varies by code as well as by model, with one study reporting
+$\kappa\geq.79$ against a human gold standard for three of nine codes and
+$\kappa\geq.60$ for eight of nine with a stronger model, against a mean of
+.34 with a weaker one \cite{dunivin2024scalable}. The better reports place
+the model's figure next to the human one: coding open-text survey answers
+into fifty categories, the best model was correct on 93.9\% of items and a
+second human coder on 94.7\% \cite{mellon2024do}; and in replications of
+fourteen coding tasks, recent models agreed with attentive human coders at
+rates comparable to agreement among humans, with disagreement between models
+concentrated on the texts that also divided people, and with clarification
+of the codebook raising both \cite{nakamura2026observational}.
 
 The content-analytic framing makes the requirements simple. The model is an
 additional coder. A coder is trained on material that is then set aside,
@@ -350,8 +363,13 @@ the validation subset is the benchmark, and the subset must be large enough
 for the coefficients to be estimated with useful precision
 (Table~\ref{tab:kappa}). For multimodal annotation, where a vision-language
 model codes gaze, gesture, or engagement from video, the requirements are the
-same, and published validations are fewer; HRI's own experience is that such
-agreement can be modest \cite{abbasi2025robotled}. Checks of this kind are
+same and published validations are fewer. An analysis prompted by the
+finding that 125 of 1{,}702 papers at one HCI conference annotated video
+found that a vision-language model alone approached human accuracy on
+average across fifteen benchmark tasks, and that people verifying the
+model's output did better than either alone while halving annotation time
+\cite{shen2026can}; agreement on clinically meaningful judgements in HRI
+has been much lower \cite{abbasi2025robotled}. Checks of this kind are
 already made in HRI and are cheap to strengthen. In GRACE, for example, a
 language model assigned annotators' free-text explanations to categories
 that a researcher had derived from a sample of the data, and the researcher
@@ -377,13 +395,18 @@ conclusions are robust to it.
 
 Even a well-validated annotator makes errors, and errors that are correlated
 with the variables under study bias the estimates and tests computed from the
-labels. High agreement does not make the problem disappear. Methods now exist
+labels. High agreement does not make the problem disappear: substituting
+model labels directly into a regression has been shown to give substantial
+bias and invalid confidence intervals even when the labels are 80 to 90\%
+accurate \cite{egami2023using}. Methods now exist
 that combine a small set of human labels with a large set of model labels to
 produce estimates with valid confidence intervals: prediction-powered
 inference \cite{angelopoulos2023prediction}, design-based supervised learning
-for downstream regression \cite{egami2023using}, and procedures that route
+for downstream regression \cite{egami2023using}, procedures that route
 items to human coders according to the model's confidence
-\cite{gligoric2025can}. They suit HRI's typical situation of a few hundred to
+\cite{gligoric2025can}, and corrections for a judge's imperfect sensitivity
+and specificity estimated from a human-labelled calibration set
+\cite{lee2025how}. They suit HRI's typical situation of a few hundred to
 a few thousand items of which a subset can be double-coded. At the least, the
 main analysis should be repeated on the human-coded subset alone and any
 divergence reported.
@@ -408,7 +431,12 @@ reasoning elicited before the score \cite{liu2023geval}. Criteria should be
 expected to change as outputs are inspected, a phenomenon documented as
 criteria drift, which is a reason to iterate on the rubric with human raters
 before freezing it \cite{shankar2024who}. Panels of diverse judges can reduce
-the idiosyncrasy of any one \cite{verga2024replacing}. For multimodal
+the idiosyncrasy of any one \cite{verga2024replacing}. The form of the human
+reference matters as well: where several ratings of an item are defensible,
+forcing human raters to choose one biases the validation, and selecting
+judges against such labels picked judges that performed markedly worse than
+those selected against ratings that allowed a set of acceptable answers
+\cite{guerdan2025validating}. For multimodal
 material, vision-language judges have been found to track human preferences
 in pairwise comparison better than in absolute scoring
 \cite{chen2024mllm}, which favours comparative designs.
@@ -444,11 +472,18 @@ their fidelity is unstable across prompts and over time
 \cite{bisbee2024synthetic}; they misportray and flatten the identity groups
 they are asked to represent \cite{wang2025large}; substituting them for
 participants conflicts with the values of representation and inclusion that
-motivate participatory research \cite{agnew2024illusion}; and they cannot
-give what a participant gives, a response grounded in an experience
-\cite{harding2024ai}. For HRI the last point is decisive. The discipline's
-subject is what happens when a person meets an embodied machine, and a
-language model has never met one.
+motivate participatory research \cite{agnew2024illusion}; qualitative
+researchers who tried them found that they foreclose participants' consent
+and agency and lack contextual depth \cite{kapania2025simulacrum}; and the
+case that they cannot replace participants has been made directly
+\cite{harding2024ai}. For HRI there is a further and decisive point. The
+discipline's subject is what happens when a person meets an embodied
+machine, and a language model has never met one. The two attempts to
+simulate HRI participants described under \bpr{bp:validate} bear this out:
+simulated ratings tracked human ones for some measures and studies, failed
+unpredictably for others, and inverted the dimension of comfort and
+strangeness that is most bound up with physical presence
+\cite{wachowiak2024are,lockwood2026when}.
 
 Simulation nonetheless has legitimate uses. Before participants are
 recruited, simulated users can exercise a dialogue system through many more

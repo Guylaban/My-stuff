@@ -23,10 +23,26 @@ modest number of items annotated by all of them, it asks, for each annotator
 in turn, whether the model agrees with the remaining annotators at least as
 well as the excluded annotator does, allowing a stated margin for the
 model's lower cost; the model is accepted as an alternative if it wins this
-comparison for a sufficient proportion of annotators. The procedure fits
-HRI's circumstances: it requires only the multiply annotated subset that
-\bpr{bp:human} already calls for, and it yields a justified decision in place
-of an appeal to a conventional threshold.
+comparison for at least half of the annotators. The procedure fits HRI's
+circumstances: its authors recommend at least three annotators and 50 to 100
+items, which is the multiply annotated subset that \bpr{bp:human} already
+calls for, and it yields a justified decision in place of an appeal to a
+conventional threshold. Variants extend the idea to the common case in which
+different items were rated by different people, by testing whether the
+agreement of panels that include the model is non-inferior to that of
+all-human panels \cite{omar2026altratest}, and to equivalence testing on
+Krippendorff's $\alpha$ with the model swapped into the group of human
+annotators \cite{he2025can}.
+
+Two cautions apply to any ceiling-referenced figure. A single aggregate can
+flatter the model: when many items have uncertain human labels,
+model--human agreement can appear equal to or better than human--human
+agreement, while on the items where people are consistent it falls well
+below, so agreement should be stratified by how much the human raters
+agreed \cite{elangovan2025beyond}. And a model should be scored against one
+rater at a time and the results averaged, not against the panel's majority
+vote; the comparison can then be expressed as the number of human raters
+whose pooled judgement the model matches \cite{resnick2021principled}.
 
 More generally, any substitution claim is a claim of equivalence or
 non-inferiority and should be tested as one. The two one-sided tests
@@ -47,7 +63,9 @@ a generative model has several at once: the items sampled, the human raters,
 the model's stochastic runs, the wording of the prompt, and the model
 version. Generalisability theory was developed for exactly this situation in
 behavioural measurement
-\cite{shavelson1991generalizability,brennan2001generalizability}. In a
+\cite{shavelson1991generalizability,brennan2001generalizability}, and
+recent guidance extends it to incomplete designs in which raters only
+partly overlap across items \cite{tenhove2024updated}. In a
 generalisability study, items are crossed with the other facets (each of a
 sample of items is scored under several prompt variants, several runs each,
 and by several human raters), and the variance of the scores is decomposed
@@ -84,6 +102,10 @@ annotators scored the appropriateness of robot actions and explained their
 scores retain the spread of judgements for each scene, and GRACE uses that
 spread directly, separating scenes on which annotators agree from those on
 which they do not and treating the two differently \cite{dogan2025grace}.
+
+Evaluation against a majority label is also technically unsound in
+this situation: calibration measured against the human majority is
+ill-defined when people inherently disagree \cite{baan2022stop}.
 
 Three designs follow. A Perceiver or Judge can be scored by how closely the
 distribution of its labels over repeated runs or personas matches the
