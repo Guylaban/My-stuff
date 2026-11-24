@@ -1,0 +1,113 @@
+%% ACM Transactions on Human-Robot Interaction (THRI) -- submission format
+%% Compile with:  latexmk -pdf main.tex
+\documentclass[manuscript,screen,review]{acmart}
+
+%% ---- Journal metadata (update on acceptance) -----------------------------
+\acmJournal{THRI}
+\acmYear{2026}
+\acmVolume{1}
+\acmNumber{1}
+\acmArticle{1}
+\acmMonth{11}
+\setcopyright{acmlicensed}
+\acmDOI{XXXXXXX.XXXXXXX}
+
+%% ---- Packages -------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\bpr}[1]{\textbf{BP\ref{#1}}}
+\newcommand{\role}[1]{\textsf{R#1}}
+\newcommand{\todo}[1]{\textcolor{red}{[#1]}}
+
+%% Numbered best-practice statements
+\newcounter{bpcount}
+\newenvironment{practice}[2]{%
+  \refstepcounter{bpcount}\label{#1}\par\smallskip\noindent
+  \textbf{BP\thebpcount. #2.}\ \itshape}{\par\smallskip}
+
+\begin{document}
+
+\title[Evaluate the Role, Not the Model]{Evaluate the Role, Not the Model: Best Practices for Evaluating Language, Vision, and Action Models in Human-Robot Interaction}
+
+\author{Guy Laban}
+\orcid{0000-0002-3796-1804}
+\affiliation{%
+  \institution{Ben-Gurion University of the Negev}
+  \city{Be'er Sheva}
+  \country{Israel}}
+%\email{} % add corresponding-author e-mail before submission
+
+%% Add co-authors here before submission.
+
+\renewcommand{\shortauthors}{Laban}
+
+\input{sections/00_abstract}
+
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10010520.10010553.10010554</concept_id>
+       <concept_desc>Computer systems organization~Robotics</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10003120.10003121.10003122</concept_id>
+       <concept_desc>Human-centered computing~HCI design and evaluation methods</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010147.10010178.10010179</concept_id>
+       <concept_desc>Computing methodologies~Natural language processing</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10002944.10011123.10011130</concept_id>
+       <concept_desc>General and reference~Evaluation</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computer systems organization~Robotics}
+\ccsdesc[500]{Human-centered computing~HCI design and evaluation methods}
+\ccsdesc[300]{Computing methodologies~Natural language processing}
+\ccsdesc[300]{General and reference~Evaluation}
+
+\keywords{human-robot interaction, large language models, vision-language models, vision-language-action models, evaluation, inter-rater reliability, LLM-as-a-judge, measurement validity, reproducibility, reporting guidelines}
+
+\maketitle
+
+\input{sections/01_introduction}
+\input{sections/02_background}
+\input{sections/03_framework}
+\input{sections/04_crosscutting}
+\input{sections/05_roles}
+\input{sections/06_emerging}
+\input{sections/07_examples}
+\input{sections/08_reporting}
+\input{sections/09_discussion}
+
+\begin{acks}
+The question that motivates this article was raised in a joint meeting of the
+user-studies and teams working groups of the HRI community and in the
+discussion that followed it; the article is offered as a contribution to that
+discussion rather than as its conclusion.
+\todo{Add funding and individual acknowledgements. Under ACM's policy on
+authorship, any use of generative AI tools in preparing the text must be
+disclosed here; state which tools were used and for what before submission.}
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\appendix
+\input{sections/10_appendix}
+
+\end{document}

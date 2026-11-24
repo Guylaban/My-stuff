@@ -1,0 +1,124 @@
+\section{Introduction}
+\label{sec:intro}
+
+Generative models have entered human-robot interaction (HRI) by two doors.
+Through the first, they have become parts of robots. Large language models
+(LLMs) write what social robots say
+\cite{williams2024scarecrows,kim2024understanding,zhang2023large}; they and
+their multimodal successors, vision-language models (VLMs), interpret what
+people say and do, choose what the robot should do next, and generate
+gestures, facial expressions, and programs
+\cite{mahadevan2024generative,wang2024lami}. Vision-language-action models
+(VLAs) go further and map camera images and spoken instructions directly to
+motor commands \cite{zitkovich2023rt2,kim2024openvla,black2024pi0}. Through
+the second door, less noticed, the same models have become parts of the
+research apparatus: they code transcripts, score video, summarise interviews,
+judge the quality of other models' outputs, and simulate the users on whom
+protocols are piloted \cite{gilardi2023chatgpt,ziems2024can,zheng2023judging}.
+
+The community has no shared standard for evaluating either use. The question
+was put plainly in a recent meeting of HRI researchers concerned with user
+studies and with human-robot teams. The wider AI community offers practices,
+such as using a model as a judge of another model's outputs, or validating
+outputs against human judgement, but HRI needs standards of its own, because
+what counts as adequate evaluation depends on how the model is used.
+Comparing a model's natural-language outputs with those a human would have
+produced is a way of establishing that the outputs are relevant, safe,
+transparent, and correct. Evaluating a model whose embeddings feed a
+downstream component looks instead like evaluating a classifier. It is hard,
+the meeting concluded, to see a one-size-fits-all solution.
+
+This article takes that conclusion as its starting point and turns it into a
+proposal. We argue that a single standard for ``LLMs in HRI'' is neither
+achievable nor desirable, and that the difficulty dissolves once the unit of
+evaluation is changed. What should be evaluated is not the model but the
+\emph{role} the model plays in the robot's architecture or in the research
+pipeline. Roles are few and stable even as models change every few months,
+and each role already has an evaluation tradition with decades of
+methodological development behind it. A model that speaks to a person
+inherits the tradition of human evaluation of generated text
+\cite{vanderlee2021human,howcroft2020twenty}. A model that perceives a
+person's state inherits the traditions of classifier evaluation and of
+behavioural coding with multiple raters \cite{hallgren2012computing}. A model
+that moves an arm near a person inherits the tradition of trial-based policy
+evaluation \cite{kressgazit2024robot}. A model that codes the data of a study
+inherits the tradition of content analysis, in which a coder, human or
+otherwise, is trusted only to the extent that their agreement with other
+coders has been demonstrated \cite{krippendorff2018content}. The work of
+standard-setting is then largely one of translation: identifying the role,
+finding the tradition, and adapting its requirements to the conditions of HRI.
+
+Those conditions are what make HRI's problem distinct from the problem that
+natural language processing (NLP) is already working on. First, a robot's
+outputs are embodied and situated. An utterance is delivered in a voice, by a
+body, in a place, to a particular person, within a conversational pause; a
+response that would be rated as excellent on a screen can fail as speech
+because it is too long, arrives two seconds late, or refers to something the
+robot cannot see \cite{skantze2021turn,irfan2025between}. Second, outputs can
+become physical actions, so that an error is not only a wrong sentence but a
+movement near a body \cite{robey2025jailbreaking,hundt2025llm}. Third, HRI
+studies are small. Samples of a few dozen participants and a few hundred
+utterances are typical, which rules out the large test sets on which
+meta-evaluation in NLP relies and makes the precision of every estimate a
+live concern \cite{leichtmann2022crisis}. Fourth, many HRI applications
+involve children, older adults, and people seeking support, populations for
+whom an inadequate output has consequences that a benchmark score does not
+express \cite{abbasi2025robotled,irfan2024recommendations}. Fifth, the field's
+primary instrument is the user study, and it is tempting to let the user
+study stand in for evaluation of the model. We will argue that it cannot.
+
+There is also evidence that current practice falls short of what any of the
+inherited traditions would accept. Reviews of LLM-based HRI find that the
+model's role is often described loosely and that model versions, prompts, and
+parameters are reported inconsistently, which leaves studies impossible to
+replicate once a hosted model is withdrawn
+\cite{williams2024scarecrows,kim2024understanding,ashok2026why}. HRI has in
+the past identified and repaired weaknesses of this kind, in the reporting of
+Wizard-of-Oz studies \cite{riek2012wizard}, in the statistical treatment of
+rating scales \cite{schrum2023concerning}, and in replicability more broadly
+\cite{gunes2022reproducibility,leichtmann2022crisis}. Generative models are
+the next such case, and they compound the earlier ones: an LLM-driven robot
+has been aptly described as a scarecrow standing where the wizard used to be
+\cite{williams2024scarecrows}, and it is a scarecrow whose brain is rented
+from a provider that may change it without notice \cite{chen2024how}.
+
+\paragraph{Contributions.} The article makes four contributions.
+\begin{enumerate}[leftmargin=1.6em]
+\item A \emph{role-sensitive framework} (Section~\ref{sec:framework}) that
+distinguishes nine roles of generative models in HRI research, four levels at
+which evidence is gathered, five kinds of claim, and three tiers that scale
+the expected evidence to exposure and consequence.
+\item Twenty-four \emph{best practices}: ten that apply to any study
+(Section~\ref{sec:crosscutting}) and fourteen that are specific to a role
+(Section~\ref{sec:rolepractices}), each traced to the tradition in NLP,
+psychology, or robotics from which it is adapted.
+\item A description of \emph{emerging practices} (Section~\ref{sec:emerging})
+that are new or newly feasible, several of them first tried in HRI, with an
+assessment of what each can and cannot establish.
+\item Practical instruments: three \emph{worked examples}
+(Section~\ref{sec:examples}), \emph{precision-planning tables} for validation
+subsets and physical trials (Appendix~\ref{app:precision}), and a
+\emph{reporting checklist} with questions for reviewers
+(Section~\ref{sec:reporting}).
+\end{enumerate}
+
+\paragraph{Scope and approach.} This is an integrative methodological review
+with recommendations, not a systematic review. We did not attempt to
+enumerate and code every HRI study that uses a generative model; recent
+reviews do that \cite{williams2024scarecrows,kim2024understanding}. We read
+across three literatures (evaluation methodology in NLP and machine learning;
+reliability, validity, and research practice in psychology and content
+analysis; policy evaluation and safety in robotics) for practices that answer
+problems HRI studies now face, and we examined recent HRI work, including our
+own, for practices that are emerging locally. The selection reflects the
+author's position in social and affective robotics, where the Speaker and
+Perceiver roles and vulnerable populations are most prominent; we have tried
+to give physical interaction and action models equal weight, and we return to
+this limitation in Section~\ref{sec:discussion}. Throughout, ``model'' means a
+pretrained generative or foundation model (LLM, VLM, or VLA) together with
+its prompt and configuration, and ``evaluation'' means the gathering of
+evidence about whether the model is adequate to its role, as distinct from
+the evaluation of the robot or of the interaction as a whole. The
+recommendations are proposals for discussion. A standard becomes one only
+when a community adopts it, and Section~\ref{sec:discussion} suggests how that
+process might proceed.

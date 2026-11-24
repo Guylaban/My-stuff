@@ -1,0 +1,82 @@
+% Figure 1: functional roles of generative models in an HRI pipeline
+\begin{figure}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    font=\sffamily\footnotesize,
+    role/.style={draw=black!70, rounded corners=2pt, minimum height=11mm,
+                 text width=23mm, align=center, fill=black!4, inner sep=2pt},
+    inst/.style={draw=black!70, dashed, rounded corners=2pt, minimum height=9mm,
+                 text width=27mm, align=center, fill=white, inner sep=2pt},
+    actor/.style={draw=black!70, thick, minimum height=11mm, text width=15mm,
+                  align=center, fill=white},
+    flow/.style={-{Latex[length=2mm]}, semithick, black!75},
+    obs/.style={-{Latex[length=2mm]}, semithick, dashed, black!60},
+    band/.style={font=\sffamily\scriptsize\itshape, text=black!70}]
+
+% --- actors --------------------------------------------------------------
+\node[actor] (human) at (0,0) {Person(s)};
+\node[actor] (human2) at (14.6,0) {Person(s)};
+
+% --- in-robot roles ------------------------------------------------------
+\node[role] (perc) at (2.65,0) {\textbf{R1 Perceiver}\\interprets people\\and scenes};
+\node[role] (rep)  at (5.45,0) {\textbf{R2 Representer}\\embeds, retrieves,\\remembers};
+\node[role] (plan) at (8.25,0) {\textbf{R3 Decider}\\plans, selects,\\times, defers};
+\node[role] (lang) at (11.4,1.45) {\textbf{R4 Speaker}\\user-facing\\language};
+\node[role] (beh)  at (11.4,0) {\textbf{R5 Behaviour author}\\expressive behaviour,\\code, parameters};
+\node[role] (act)  at (11.4,-1.45) {\textbf{R6 Actor}\\end-to-end\\physical action};
+
+\draw[flow] (human) -- (perc);
+\draw[flow] (perc) -- (rep);
+\draw[flow] (rep) -- (plan);
+\draw[flow] (plan.east) -- ++(0.35,0) |- (lang.west);
+\draw[flow] (plan.east) -- (beh.west);
+\draw[flow] (plan.east) -- ++(0.35,0) |- (act.west);
+\draw[flow] (lang.east) -- ++(0.45,0) |- ([yshift=2.5mm]human2.west);
+\draw[flow] (beh.east) -- (human2.west);
+\draw[flow] (act.east) -- ++(0.45,0) |- ([yshift=-2.5mm]human2.west);
+
+% robot boundary
+\begin{scope}[on background layer]
+  \node[draw=black!55, thick, rounded corners=4pt, fill=black!1,
+        fit=(perc)(rep)(plan)(lang)(beh)(act), inner sep=3.2mm] (robot) {};
+\end{scope}
+\node[band, anchor=south west] at ([xshift=1mm,yshift=0.2mm]robot.north west)
+     {Robot architecture (models deployed in the interaction loop)};
+
+% end-to-end bypass (VLA)
+\draw[flow, black!45] (perc.south) |- (act.west |- 0,-2.05) -| ([xshift=-6mm]act.south);
+\node[band] at (6.1,-1.86) {end-to-end vision--language--action policies collapse R1--R3 into R6};
+
+% --- research-instrument roles ------------------------------------------
+\node[inst] (anno) at (3.3,-3.75) {\textbf{R7 Annotator}\\codes transcripts,\\video, logs};
+\node[inst] (judge) at (7.3,-3.75) {\textbf{R8 Judge}\\scores outputs of\\R1--R6};
+\node[inst] (sim) at (11.3,-3.75) {\textbf{R9 Simulator}\\synthetic users,\\partners, raters};
+
+\begin{scope}[on background layer]
+  \node[draw=black!55, thick, dashed, rounded corners=4pt,
+        fit=(anno)(judge)(sim), inner sep=3.2mm] (lab) {};
+\end{scope}
+\node[band, anchor=north west] at ([xshift=1mm,yshift=-0.2mm]lab.south west)
+     {Research pipeline (models used to study the interaction)};
+
+\draw[obs] (anno.north) -- (anno.north |- robot.south);
+\draw[obs] (judge.north) -- (judge.north |- robot.south);
+\draw[obs] (sim.north) -- (sim.north |- robot.south);
+\end{tikzpicture}}
+\caption{Nine functional roles that language, vision, and action models play in
+HRI research. Solid boxes (R1--R6) are roles inside the robot's interaction
+loop; dashed boxes (R7--R9) are roles inside the research pipeline that
+observes, scores, or stands in for the interaction. A single model usually
+occupies several roles at once, and each role inherits a different evaluation
+tradition (Table~\ref{tab:roles}).}
+\Description{A block diagram. A person on the left feeds into a chain of three
+boxes inside a robot boundary labelled R1 Perceiver, R2 Representer and R3
+Decider. The Decider fans out to three output boxes, R4 Speaker, R5 Behaviour
+author and R6 Actor, each of which points to a person on the right. A grey
+arrow bypasses the chain from the Perceiver to the Actor to indicate
+end-to-end vision-language-action policies. Below the robot boundary, a dashed
+boundary labelled research pipeline contains three dashed boxes, R7 Annotator,
+R8 Judge and R9 Simulator, with dashed arrows pointing up at the robot.}
+\label{fig:roles}
+\end{figure}

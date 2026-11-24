@@ -1,0 +1,272 @@
+\section{Emerging Practices}
+\label{sec:emerging}
+
+The practices above adapt established methods. This section describes eight
+that are newer: some were published in the last two years, some have been
+tried first in HRI, and some are proposals that follow from the framework and
+have not, to our knowledge, been tested. We state for each what it can
+establish and where its limits lie.
+
+\subsection{Ceiling-Referenced Agreement and Tests of Substitution}
+\label{sec:equivalence}
+
+Reporting model--human agreement next to human--human agreement
+(\bpr{bp:human}, \bpr{bp:coder}) invites a summary: the model reaches some
+fraction of the human ceiling. The summary is useful descriptively, but a
+ratio of two noisy coefficients is unstable in small samples and does not
+answer the question usually being asked, which is whether the model may be
+used in place of a human coder or rater.
+
+The \emph{alternative annotator test} addresses that question directly
+\cite{calderon2025alternative}. With a small group of human annotators and a
+modest number of items annotated by all of them, it asks, for each annotator
+in turn, whether the model agrees with the remaining annotators at least as
+well as the excluded annotator does, allowing a stated margin for the
+model's lower cost; the model is accepted as an alternative if it wins this
+comparison for a sufficient proportion of annotators. The procedure fits
+HRI's circumstances: it requires only the multiply annotated subset that
+\bpr{bp:human} already calls for, and it yields a justified decision in place
+of an appeal to a conventional threshold.
+
+More generally, any substitution claim is a claim of equivalence or
+non-inferiority and should be tested as one. The two one-sided tests
+procedure asks the researcher to state in advance the smallest difference
+that would matter and then tests whether the observed difference lies within
+those bounds \cite{lakens2017equivalence,lakens2018equivalence}. The logic
+applies to a model compared with a human coder, to model-authored responses
+compared with human-authored ones (\bpr{bp:humanref}), to an autonomous robot
+compared with a wizard-controlled one, and to claims that an outcome does not
+differ between conditions. It has the salutary effect of making authors say
+how much worse than a human the model is allowed to be.
+
+\subsection{Generalisability Designs: Runs and Prompts as Raters}
+\label{sec:gtheory}
+
+Classical reliability treats one source of error at a time. An evaluation of
+a generative model has several at once: the items sampled, the human raters,
+the model's stochastic runs, the wording of the prompt, and the model
+version. Generalisability theory was developed for exactly this situation in
+behavioural measurement
+\cite{shavelson1991generalizability,brennan2001generalizability}. In a
+generalisability study, items are crossed with the other facets (each of a
+sample of items is scored under several prompt variants, several runs each,
+and by several human raters), and the variance of the scores is decomposed
+into components attributable to each facet and their interactions. A
+decision study then uses those components to compute how reliable a score
+would be under any proposed design.
+
+Applied to a model in a Judge or Annotator role, this answers practical
+questions that are otherwise settled by habit. If run-to-run variance is
+small and prompt-to-prompt variance is large, averaging over five runs of one
+prompt buys nothing and averaging over three prompts buys a great deal. If
+the item-by-rater interaction dominates, the construct is one on which people
+differ and no change to the model will raise agreement. The design also
+gives a principled meaning to treating the model as a rater: its runs and
+prompts are facets on the same footing as human raters, and their
+contribution to error is estimated, not assumed. The cost is a fully crossed
+subset of perhaps fifty to a hundred items, which is within reach of most
+studies. We are not aware of an HRI study that has reported such a
+decomposition, and we suggest it as the natural quantitative form of
+\bpr{bp:consistency}.
+
+\subsection{Disagreement-Aware Evaluation}
+\label{sec:perspectivist}
+
+Where human raters legitimately disagree (\bpr{bp:human}), evaluating a model
+against a majority label measures its agreement with a fiction. The
+perspectivist programme in NLP proposes keeping the individual labels and
+evaluating against their distribution
+\cite{plank2022problem,cabitza2023toward,uma2021learning}. For HRI this suits
+constructs such as social appropriateness, politeness, and comfort, which
+vary with culture, age, and familiarity with robots.
+
+Three designs follow. A Perceiver or Judge can be scored by how closely the
+distribution of its labels over repeated runs or personas matches the
+distribution of human labels for the same item, for instance by a divergence
+measure, with the caution that variability across a model's samples is not
+the same thing as variability across a population and tends to be narrower
+\cite{bisbee2024synthetic,wang2025large}. Agreement can be reported within
+rater subgroups, so that it is visible when a model tracks the judgements of
+one group and not another. And a Speaker's or Actor's behaviour can be
+evaluated by the proportion of raters who find it acceptable, with the lower
+tail of that distribution, the people for whom it was not acceptable,
+reported explicitly, since in deployment those people are users too.
+
+\subsection{Frozen-Interaction Replay}
+\label{sec:replay}
+
+A hosted model that has been withdrawn cannot be re-run, and a study
+conducted with it cannot be replicated in the usual sense. What can be
+preserved is the set of situations the model faced. We propose that studies
+archive, for every model call made during an interaction, the complete
+context supplied to the model (prompt, dialogue history, retrieved memory,
+sensor descriptions or images) and the output returned. This archive supports
+three uses.
+
+\emph{Drift quantification.} When a model is updated, the archived contexts
+are replayed through the new version and the outputs compared with the
+originals on the study's rubric, by the study's raters or its validated
+judge. The result is a direct estimate of how much the robot's behaviour
+would have changed, in the units the study cares about, which is the
+information a reader needs to decide whether the original finding still
+applies. Given the documented scale of behavioural change between versions of
+the same commercial model \cite{chen2024how}, this is not a hypothetical
+concern.
+
+\emph{Regression testing.} Contexts in which the original model failed, or
+in which a supervisor intervened, become a test suite. The idea of testing
+specific behavioural capabilities with targeted cases, instead of relying on
+aggregate held-out accuracy, is established in NLP \cite{ribeiro2020beyond};
+an HRI laboratory's own failures are the most relevant cases it will ever
+have.
+
+\emph{Cross-laboratory comparison.} With consent and de-identification,
+archived contexts can be shared, so that different models and prompts are
+compared on identical situations drawn from real interactions with real
+populations, which no public benchmark currently offers.
+
+The limit of replay is that it is open-loop. It shows what a new model would
+have said at a given point in an old conversation, not how the conversation
+would then have gone. Replay therefore supports component-level and not
+interaction-level claims. For action models the analogue is evaluation in
+simulation built to correlate with real outcomes \cite{li2024evaluating},
+with a small frozen set of physical scenarios as an anchor, and the same
+caveat applies with greater force because physical interaction is
+closed-loop at every time step.
+
+\subsection{Supervised Autonomy as an Evaluation Instrument}
+\label{sec:lloz}
+
+Between the Wizard-of-Oz study, in which a person produces the robot's
+behaviour, and the autonomous study, in which a model does, lies an
+arrangement that deserves to be used deliberately: the model proposes and a
+trained supervisor approves, edits, or replaces each proposal before it is
+delivered. The arrangement is usually adopted for safety, and it is the
+ethically appropriate default for early Tier~III studies. Its value as an
+evaluation instrument is less often noticed. Every decision by the supervisor
+is an expert judgement of a model output, made in context, at the moment of
+use. The proportion of proposals approved unchanged, the size and kind of
+edits, and the reasons for replacement constitute a component-level
+evaluation that is collected as a by-product of running the study, on
+exactly the distribution of situations that the deployment will meet.
+
+Reporting should follow the spirit of the Wizard-of-Oz guidelines
+\cite{riek2012wizard}: who the supervisor was and how they were trained, what
+they could see, the time pressure under which they decided (since an
+approval given within a conversational pause is a weaker endorsement than
+one given at leisure), and whether participants knew. A subset of
+proposals should be independently rated afterwards so that the supervisor's
+own reliability is known. The sequence from wizard-controlled to supervised
+to autonomous operation, with the intervention rate reported at each stage,
+gives a study programme a graded path to autonomy in which each step is
+licensed by evidence from the last.
+
+\subsection{Embodied Red-Teaming and Psychosocial Safety}
+\label{sec:redteam}
+
+Adversarial testing before release is standard for language models and is
+recommended by risk-management frameworks for generative AI
+\cite{nist2024generative}. Robots change what is at stake. Jailbreaking
+attacks devised for chatbots have been adapted to LLM-controlled robots and
+have elicited harmful physical actions from research and commercial
+platforms \cite{robey2025jailbreaking,zhang2025badrobot}; LLMs evaluated in
+HRI task scenarios have accepted instructions that were dangerous, unlawful,
+or discriminatory \cite{hundt2025llm}; and benchmarks of semantic safety for
+embodied models have been constructed from records of real injuries and from
+robot ``constitutions'' \cite{sermanet2025generating}. For robots in social
+and supportive roles, the hazards are psychosocial as much as physical:
+manipulation, the fostering of dependence, harmful advice, and breaches of
+confidence, for which multi-dimensional safety evaluation has begun to be
+developed \cite{luo2026dialogguard}.
+
+We recommend that Tier~III studies include a documented red-team exercise
+before participants are exposed, and that Tier~II studies with unreviewed
+user-facing output include a lighter one. The report should state who
+performed it, which categories of hazard were probed, how many attempts were
+made, how many succeeded, and what was changed as a result. The categories
+should include those specific to embodiment: instructions that are harmless
+as text and harmful as action; instructions from a bystander who is not the
+user; attempts to have the robot disclose what another user told it; and
+content in the robot's field of view or hearing that the model may treat as
+an instruction. People with relevant expertise, including clinicians and
+safeguarding professionals where the population warrants, should take part,
+as should members of the population itself where that is feasible.
+
+\subsection{Persona and Identity Stability}
+\label{sec:persona}
+
+A robot's character is part of its design, and with a language model it is
+specified in a prompt and maintained, or not, by the model across a
+conversation. HRI experts consulted on prompt design identified legibility
+of the robot's personality, users' ability to adapt it, and safety,
+deception, and governance as their main concerns, and unexplained change of
+personality mid-interaction as a characteristic failure \cite{ashok2026why}.
+Stability can be measured. Probes of the persona's stated traits, knowledge,
+and boundaries are inserted at intervals in long simulated or replayed
+conversations, and the consistency of the answers is scored; the same
+conversations show whether the robot's account of its own nature and
+capabilities stays truthful. Work on multi-turn simulation shows that drift
+grows with conversation length and that how the conversation history is
+presented to the model strongly affects it \cite{luo2026spasm}, which implies
+that persona stability is a property of the whole configuration and has to
+be tested at the conversation lengths that the deployment will reach. We
+caution against measuring a robot's ``personality'' by administering human
+personality inventories to the model: the psychometric properties of such
+inventories do not automatically transfer to language models
+\cite{suhr2025challenging}, and what matters for HRI is the persona that
+people perceive, which is an interaction-level question.
+
+\subsection{Reference-Corpus Alignment}
+\label{sec:alignment}
+
+A robot that offers support, tutoring, or advice is implicitly compared with
+the human professionals who do the same. Matched human responses
+(\bpr{bp:humanref}) are the direct comparison, but they are expensive.
+Reference-corpus alignment is a scalable complement: the robot's
+conversations are compared with an existing corpus of professional practice
+in a shared embedding space. In the first application to HRI, disclosures
+made to an LLM-driven robot during a wellbeing intervention and the robot's
+responses were compared with a corpus of counselling exchanges between
+help-seekers and licensed therapists. Themes were derived by clustering each
+corpus; each item was then assigned to the nearest theme of the other corpus
+and counted as fitting if it lay within a distance threshold derived from
+that theme's own dispersion. About 91\% of disclosures to the robot fitted
+therapy themes, about 28\% of therapy disclosures fitted robot-conversation
+themes, and both disclosures and responses were compared for semantic
+similarity within matched themes \cite{chiang2025talk}.
+
+The method establishes something that no rubric-based audit of a sample can:
+where, in the space of what professionals deal with, the robot's
+conversations fall, and which regions of professional practice they never
+enter. The asymmetry in the figures above is such a finding. Its limits are
+equally clear. Proximity in embedding space is not appropriateness; a
+response can be topically aligned with therapists' responses and still be
+wrong for the person. Results depend on the embedding model and require the
+checks of \bpr{bp:embed}. Dispersion-based thresholds give diffuse reference
+themes a larger capture radius, which the original authors note. And the
+reference corpus must be examined for comparability: in the case described,
+written exchanges on a counselling platform were compared with spoken
+conversations between students and a robot. Used with these cautions,
+alongside and not instead of rated audits, reference-corpus alignment gives
+HRI a way to situate generative robots relative to human practice at a scale
+that hand coding cannot reach.
+
+\subsection{Shared Infrastructure}
+\label{sec:infrastructure}
+
+Several of the practices in this article are costly for a single laboratory
+and cheap for a community. Three kinds of shared resource would lower the
+cost. The first is tooling that makes good reporting automatic: experiment
+platforms that version prompts and configurations and log every model call
+with its context, as open-source tools for LLM-based interaction experiments
+already do for text agents \cite{laban2024lexi}. The second is shared,
+multiply rated collections of HRI material (robot utterances in context,
+clips of generated behaviour, videos of handovers) with which a laboratory
+can validate a judge for a common construct without rating everything anew;
+these would be to HRI what meta-evaluation datasets are to NLP. The third is
+distributed evaluation, in which the same configuration is evaluated at
+several sites, as robot learning has begun to do for generalist policies
+\cite{atreya2025roboarena} and as psychology does in multi-site
+replications; for interaction-level claims about generative robots, whose
+behaviour differs for every participant, multi-site evidence is likely to be
+the only route to conclusions that hold beyond one laboratory's population.

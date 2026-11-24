@@ -1,0 +1,259 @@
+\section{A Role-Sensitive Framework}
+\label{sec:framework}
+
+The framework has three parts: the \emph{role} a model plays, the \emph{level}
+at which evidence about it is gathered, and the \emph{claim} that the evidence
+is meant to support. A fourth consideration, the \emph{tier} of risk, scales
+how much evidence is proportionate. Together they answer the question that a
+single standard cannot: what would count as adequate evaluation for
+\emph{this} use of \emph{this} model in \emph{this} study.
+
+\subsection{Nine Roles}
+\label{sec:roles}
+
+Figure~\ref{fig:roles} and Table~\ref{tab:roles} set out nine functional
+roles. Six are roles in the robot's interaction loop. Three are roles in the
+research pipeline, where a model is used to study the interaction and is never
+encountered by a participant. The distinction matters because the two groups
+fail differently. An error in the loop reaches a person. An error in the
+pipeline reaches the literature.
+
+\input{sections/fig_architecture}
+
+\begin{table}[t]
+\caption{Functional roles of generative models in HRI, the evaluation
+tradition each inherits, and the component-level evidence that the tradition
+treats as the minimum.}
+\label{tab:roles}
+\small
+\begin{tabularx}{\textwidth}{@{}L{2.25cm}L{3.6cm}L{2.9cm}Y@{}}
+\toprule
+Role & Typical use in HRI & Inherited tradition & Minimum component-level evidence \\
+\midrule
+\role{1} Perceiver & Infers affect, engagement, intent, or wellbeing from
+speech, text, or video; describes scenes & Classification; clinical and
+behavioural assessment & Per-class performance against multiply rated human
+reference; agreement relative to the human ceiling; subgroup error rates \\
+\role{2} Representer & Embeds utterances or images for retrieval, memory,
+similarity, clustering, user modelling & Information retrieval; construct
+validity & Retrieval accuracy; stability across embedding models and seeds;
+null baselines; human check of derived structure \\
+\role{3} Decider & Selects plans, skills, or tools; decides when to speak,
+help, interrupt, ask, or defer & Planning; judgement and decision-making &
+Agreement with expert decisions; constraint violations; calibration of
+abstention and help-seeking \\
+\role{4} Speaker & Generates language delivered to a person as speech or text
+& Human evaluation of generated text and dialogue & Rubric-based ratings by
+trained raters with reliability; error taxonomy with severity; audit of
+delivered outputs \\
+\role{5} Behaviour author & Generates gestures, facial expressions, motion
+parameters, or robot programs & Behaviour-perception studies; program
+verification & Recognition by naive observers against chance; executability
+and safety checks; comparison with expert-authored behaviour \\
+\role{6} Actor & Maps observation and instruction directly to motor commands &
+Trial-based policy evaluation; safety engineering & Success rates with
+intervals over specified conditions; failure taxonomy; safety-envelope
+violations; reliably adjudicated outcomes \\
+\midrule
+\role{7} Annotator & Codes transcripts, video, or logs produced by a study &
+Content analysis & Agreement with independent human coders on a held-out
+subset, alongside human--human agreement \\
+\role{8} Judge & Scores outputs of \role{1}--\role{6} in place of human raters
+& Meta-evaluation & Judge--human agreement per construct; bias probes;
+independence from the system judged \\
+\role{9} Simulator & Stands in for users, partners, or raters & Simulation
+validity & Fidelity against human data on the properties relied upon;
+restricted to piloting and stress-testing \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Three properties of the taxonomy are worth stating. First, roles are
+functional, not architectural. A single call to a multimodal model can occupy
+several roles at once, as when a model receives a camera frame and a
+transcript, decides that the user is distressed (\role{1}), chooses to offer
+support instead of continuing the task (\role{3}), and writes the utterance
+(\role{4}). The evaluation obligations of all three roles apply, even though
+there is one prompt and one output. End-to-end vision-language-action
+policies make the same point more sharply: they collapse perception,
+representation, and decision into action, which removes the intermediate
+outputs that the first three traditions evaluate and leaves only behaviour to
+be judged.
+
+Second, the taxonomy makes concrete the contrast with which this article
+began. A model in the Speaker role produces open-ended text that a person
+hears, so the relevant standard is human evaluation of generated language:
+is it relevant, correct, safe, and transparent? A model in the Representer or
+Perceiver role produces a vector or a label that a person never sees, so the
+relevant standard is that of a measurement instrument or a classifier: is it
+accurate against a reliable reference, stable, and unbiased across groups?
+Applying the first standard to the second role produces vague reassurance
+(``the outputs looked reasonable''); applying the second to the first produces
+false precision (an accuracy figure for something that has no single correct
+answer).
+
+Third, the research-pipeline roles are included because they are where
+generative models have entered HRI most quietly. A study with a fully
+scripted robot can still depend on a language model that coded the
+transcripts, a vision-language model that scored engagement from video, or
+simulated users that were used to tune the protocol. The robot in such a
+study is not ``LLM-powered'', and the paper may not appear in any review of
+LLM-based HRI, yet its findings are conditional on the model's validity as an
+instrument.
+
+\subsection{Four Levels of Evidence}
+\label{sec:levels}
+
+Evidence about a model in a role can be gathered at four levels
+(Table~\ref{tab:levels}).
+
+\begin{description}[leftmargin=1.2em, style=sameline]
+\item[L1 Component.] The model's outputs are evaluated against the standard of
+the role's tradition, offline or from logs: are the labels accurate, the
+utterances appropriate, the plans executable, the trajectories successful?
+\item[L2 System.] The model is evaluated as integrated in the robot and
+running in real time: latency, propagation of speech-recognition and
+perception errors, consistency between what the model says and what the body
+can do, behaviour under network loss, recovery from failure.
+\item[L3 Interaction.] People interact with the robot and outcomes are
+measured in them: perceptions, behaviour, task performance, learning,
+wellbeing. This is the level of the HRI user study.
+\item[L4 Deployment.] The robot is used over time outside the laboratory:
+drift in model behaviour, novelty effects, accumulation of memory and
+personalisation, rare harms, and the organisational context of use.
+\end{description}
+
+\begin{table}[t]
+\caption{Questions answered at each level of evidence, with typical measures.
+The levels are complementary: evidence at one level does not substitute for
+evidence at another.}
+\label{tab:levels}
+\small
+\begin{tabularx}{\textwidth}{@{}L{1.9cm}L{4.3cm}Y@{}}
+\toprule
+Level & Question & Typical measures \\
+\midrule
+L1 Component & Are the model's outputs adequate for the role? & Agreement
+with human reference; rubric ratings; accuracy, F1, calibration; success rate
+over trials; error and hallucination rates; run-to-run and prompt-to-prompt
+consistency \\
+L2 System & Does the integrated robot behave as specified in real time? &
+End-to-end response latency distribution; word error rate and its downstream
+effect; capability-consistency violations; fallback and timeout rates;
+intervention rate of a supervising human \\
+L3 Interaction & What happens to the people who interact with it? &
+Validated self-report scales; behavioural measures; task outcomes;
+manipulation checks; qualitative accounts; adverse events \\
+L4 Deployment & Does it keep working, and for whom, over time? & Longitudinal
+outcome trajectories; usage and attrition; drift under model updates; incident
+reports; subgroup differences in benefit and harm \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The central principle is that \emph{evidence does not transfer between levels
+without an argument}. Two inferential errors follow from ignoring it, and both
+are common.
+
+The \emph{upward leap} takes component-level evidence, often not even the
+authors' own, as support for interaction-level claims. A model that leads a
+public benchmark, or that the authors found to give sensible answers when
+prompted at a desk, is assumed to be adequate when embodied in a robot,
+addressed in noisy speech by an older adult, and constrained to answer within
+a conversational pause. Benchmarks rarely sample that context, and the
+system-level properties that decide whether an interaction succeeds, such as
+latency and error propagation, are not properties of the model at all.
+
+The \emph{downward leap} takes interaction-level evidence as support for
+component-level adequacy. Participants rated the robot as empathic,
+trustworthy, and useful, so its utterances are taken to have been accurate
+and safe. This inference fails for a specific reason: participants are poorly
+placed to detect the errors that matter most. A fluent, confident, incorrect
+answer is by construction one that the listener does not recognise as
+incorrect. Favourable questionnaire scores are compatible with a robot that
+fabricated facts, overstated its capabilities, or gave advice a professional
+would not have given. Only an audit of the outputs that participants actually
+received can establish what they received.
+
+\subsection{Five Kinds of Claim}
+\label{sec:claims}
+
+Evaluation serves a claim, and the same data can be adequate for one claim
+and inadequate for another. We distinguish five.
+
+\begin{description}[leftmargin=1.2em, style=sameline]
+\item[Capability.] The model can perform the role to a stated standard under
+stated conditions (``the model classified engagement with $F_1=.78$ against
+two trained coders'').
+\item[Comparison.] One configuration performs differently from another on a
+stated outcome (``participants disclosed more to the robot with the adaptive
+prompt than to the robot with the static prompt'').
+\item[Substitution.] The model can replace a human, or a more expensive
+procedure, for a stated purpose (``the model can replace the second coder'';
+``the autonomous robot can replace the wizard'').
+\item[Safety.] The frequency and severity of harmful outputs or actions are
+below a stated bound under stated conditions.
+\item[Generalisation.] A finding obtained with one model, prompt, population,
+or setting holds for others.
+\end{description}
+
+Substitution and safety claims carry the heaviest burden and are the most
+often under-supported. A substitution claim is a claim of equivalence or
+non-inferiority, and a non-significant difference between model and human in a
+small sample is not evidence of either (Section~\ref{sec:equivalence}). A
+safety claim concerns the tail of a distribution, and a mean rating says
+little about tails. Generalisation claims about ``LLMs'' or ``VLAs'' as a
+class, made on the basis of one model at one point in time, are best avoided
+or explicitly hedged; what a study shows is that one configuration behaved in
+one way.
+
+\subsection{Three Tiers of Proportionate Evidence}
+\label{sec:tiers}
+
+Not every use of a model deserves the same scrutiny, and a standard that
+demanded maximal evidence everywhere would be ignored everywhere. We propose
+that the evidence expected of a study scale with three questions: who is
+\emph{exposed} to the model's output and how directly, what is the worst
+plausible \emph{consequence} of an inadequate output and can it be reversed,
+and how much \emph{oversight} stands between the output and the person.
+Table~\ref{tab:tiers} gives three tiers. A study is assigned the highest tier
+that any of its roles reaches.
+
+\begin{table}[t]
+\caption{Three tiers that scale the expected evidence to exposure,
+consequence, and oversight.}
+\label{tab:tiers}
+\small
+\begin{tabularx}{\textwidth}{@{}L{1.8cm}L{4.6cm}Y@{}}
+\toprule
+Tier & Defining conditions & Expected in addition to the tier below \\
+\midrule
+I Exploratory & Outputs are reviewed by a researcher before use, or reach
+only informed adult participants in low-stakes tasks under supervision;
+errors are harmless and reversible; claims are of capability or feasibility &
+Role, level, and claim declared; model and configuration fully reported;
+outputs logged and a sample inspected and described; limits on the claim
+stated \\
+II Standard & Outputs reach participants unreviewed in a controlled study, or
+model-produced labels and scores feed the study's inferential statistics;
+claims are comparative & Component-level validation against a human reference
+with reliability statistics; repeated-run consistency; audit of delivered
+outputs; validated automated evaluators; uncertainty intervals \\
+III High-stakes & Outputs reach children, patients, older adults, or people in
+distress; or drive physical action near people; or operate unsupervised over
+time; or support substitution or safety claims & Domain-expert raters;
+pre-registered evaluation plan; subgroup and failure-tail analysis; adversarial
+and stress testing; system-level safety measures with logged human
+intervention; monitoring plan for deployment \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The tiers are deliberately coarse. Their purpose is to give authors and
+reviewers a shared starting point for the question ``is this enough?'', and to
+make explicit that the answer depends on the role and the stakes and not on
+which model was used. A late-breaking report that explores whether a
+vision-language model can describe a robot's workspace need not meet the bar
+set for an autonomous robot that conducts wellbeing conversations with
+adolescents; but the second study should not be reviewed as if it were the
+first.

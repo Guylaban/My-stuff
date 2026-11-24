@@ -1,0 +1,404 @@
+\section{Practices for Every Study}
+\label{sec:crosscutting}
+
+Ten practices apply whatever role the model plays. They are stated as
+imperatives for brevity; the tier scheme of Section~\ref{sec:tiers} governs
+how far each should be taken.
+
+\subsection{Say What the Model Is Doing and What Is Being Claimed}
+
+\begin{practice}{bp:declare}{Declare roles, levels, and claims}
+State every role each model plays, in the robot and in the analysis; state at
+which levels evidence was gathered; and state which claims the evidence is
+offered for.
+\end{practice}
+
+The declaration costs a paragraph and removes the most common obstacle to
+assessing an LLM-based HRI paper, which is not knowing what the model did.
+Phrases such as ``the robot was powered by GPT-4'' conceal whether the model
+generated every utterance verbatim, selected among scripted utterances,
+paraphrased a script, produced labels that a rule-based dialogue manager
+consumed, or drafted text that an experimenter approved. These are different
+roles with different risks. The declaration should include roles in the
+research pipeline, and it should say which outputs reached participants
+without human review.
+
+\subsection{Report the Configuration as the Stimulus}
+
+\begin{practice}{bp:config}{Report the full configuration}
+Report the model snapshot, provider, access dates, sampling parameters,
+complete prompts, injected context, tools, memory, guardrails, and the speech
+and perception components around the model, in enough detail for another
+laboratory to reconstruct the stimulus.
+\end{practice}
+
+In an experiment the robot's behaviour is the stimulus, and with a generative
+model the stimulus is produced by the conjunction of model weights, prompt,
+context, and sampling parameters. Omitting any of them is equivalent to not
+describing the stimulus. Three facts make this more than a formality. Hosted
+models change: the measured behaviour of the same named commercial model on
+the same tasks shifted substantially within months \cite{chen2024how}, so a
+product name without a dated snapshot identifies a moving target. Hosted
+models are withdrawn, which makes exact replication impossible and is a
+principal argument for justifying any reliance on proprietary models in
+research \cite{palmer2024using,ollion2024dangers,rogers2023closed}. And
+outputs are sensitive to prompt details that authors regard as incidental:
+changes of formatting alone, with content held constant, can move task
+performance by tens of percentage points \cite{sclar2024quantifying}.
+
+For robots, the configuration extends beyond the model. The system prompt
+usually carries the robot's persona, its stated capabilities, and its
+behavioural boundaries, and is therefore part of the design under study.
+Expert consultation at RO-MAN 2025 produced a template with eight functional
+components for specifying, bounding, and adapting robot behaviour through
+prompts, proposed explicitly as a reporting aid as well as a design aid
+\cite{ashok2026why}; we recommend its use. The pipeline around the model
+(speech recogniser, voice-activity detection, text-to-speech, the mapping from
+model output to gesture, any content filter and what the robot does when the
+filter fires) shapes what the participant experiences as much as the model
+does and should be reported with it. For action models, the checkpoint,
+fine-tuning data, embodiment, control frequency, and the safety layer between
+policy and actuators are the corresponding items. Experiment platforms that
+store prompts and configurations alongside interaction logs make such
+reporting a by-product of running the study \cite{laban2024lexi}.
+
+\subsection{Measure Consistency Before Measuring Anything Else}
+
+\begin{practice}{bp:consistency}{Measure run-to-run and prompt-to-prompt consistency}
+Run the model more than once on the same inputs, and with reasonable variants
+of the prompt, and report how much its outputs or scores vary.
+\end{practice}
+
+Psychometrics holds that reliability bounds validity: an instrument that does
+not agree with itself cannot agree with anything else. A human coder is asked
+to demonstrate intra-rater reliability by coding the same material twice. The
+same should be asked of a model, and it frequently is not. Generative models
+are stochastic by default, and setting the temperature to zero does not
+guarantee identical outputs across calls \cite{atil2024nondeterminism}.
+Repeated classification of identical texts by the same model with the same
+prompt can fall below conventional reliability thresholds
+\cite{reiss2023testing}, and conclusions drawn from a single prompt often do
+not survive paraphrase of the instruction \cite{mizrahi2024state}.
+
+In practice this means, for a model that labels or scores (\role{1},
+\role{7}, \role{8}), running each item several times and reporting the
+agreement among runs with the coefficient that will later be used for
+agreement with people, so that the two are comparable. As a working default
+we suggest five runs, increased when agreement among them is below the level
+required of human coders. For a model that generates (\role{4}, \role{5}),
+consistency concerns properties and not surface form: across repeated
+generations from the same context, how often does the response satisfy each
+criterion of the rubric, and how often does it contain a serious error? For a
+model that acts (\role{6}), it is the repeatability of outcomes from nominally
+identical initial conditions. Where the study's conclusion depends on a
+prompt, at least a small set of meaning-preserving variants should be tested
+and the spread reported. Section~\ref{sec:gtheory} describes a design that
+estimates these sources of variance jointly.
+
+\subsection{Build a Human Reference and Show That It Is Reliable}
+
+\begin{practice}{bp:human}{Establish a human reference with documented reliability}
+Have at least two suitably qualified people independently rate or code the
+material against a written rubric, report their agreement with an appropriate
+coefficient and its confidence interval, and treat that agreement as the
+ceiling against which the model is read.
+\end{practice}
+
+Human judgement is the reference for almost everything HRI wishes to know
+about a model's outputs, and it is only as good as its reliability. Reviews
+of human evaluation in natural language generation document how often this
+is neglected: studies omit the number of raters, their expertise, the
+question they were asked, and any measure of agreement, and use quality
+criteria whose names do not correspond to shared definitions
+\cite{vanderlee2021human,howcroft2020twenty}; attempts to reproduce published
+human evaluations have been frustrated by missing detail
+\cite{belz2023missing}. HRI, which has a long practice of behavioural coding,
+is well placed to do better, but the practice needs adapting in four
+respects.
+
+\paragraph{Choose the coefficient to fit the data.} Table~\ref{tab:irr}
+summarises the choice. Percentage agreement should not be reported alone
+because it does not correct for chance \cite{cohen1960coefficient,
+hallgren2012computing}. Krippendorff's $\alpha$ handles any number of raters,
+missing ratings, and nominal to ratio data, and is the most generally
+applicable single choice \cite{hayes2007answering,krippendorff2018content}.
+For continuous ratings the intraclass correlation is appropriate, provided
+the model (one-way or two-way, random or mixed), the type (consistency or
+absolute agreement), and the unit (single or average rating) are stated,
+since these change the value and its meaning
+\cite{shrout1979intraclass,koo2016guideline}.
+
+\begin{table}[t]
+\caption{Choosing an agreement statistic for a human reference, or for
+comparing a model with one. In every case report the number of raters and
+items, the prevalence of each category, and a confidence interval.}
+\label{tab:irr}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}L{4.4cm}Y@{}}
+\toprule
+Data & Statistic & Notes \\
+\midrule
+Nominal labels, two raters & Cohen's $\kappa$
+\cite{cohen1960coefficient} & Sensitive to prevalence and to differences in
+raters' marginals; add per-category agreement \\
+Nominal labels, more than two raters or missing ratings & Krippendorff's
+$\alpha$ \cite{hayes2007answering}; Fleiss' $\kappa$
+\cite{fleiss1971measuring} & $\alpha$ accommodates incomplete designs \\
+Ordinal ratings (e.g.\ rubric scores) & Weighted $\kappa$
+\cite{cohen1968weighted}; ordinal $\alpha$ & State the weighting scheme \\
+Continuous or scale ratings & Intraclass correlation
+\cite{shrout1979intraclass,koo2016guideline} & State model, type, and unit;
+use absolute agreement when the values will be used as scores \\
+Rare categories (e.g.\ safety violations) & $\kappa$ or $\alpha$ with
+prevalence, positive and negative agreement; Gwet's AC1
+\cite{gwet2008computing} & High raw agreement can coexist with low $\kappa$
+\cite{feinstein1990high,byrt1993bias} \\
+Two measurement methods on a continuous quantity & Bland--Altman limits of
+agreement \cite{bland1986statistical}; concordance correlation
+\cite{lin1989concordance} & Correlation alone ignores systematic offset \\
+Interpretive qualitative analysis & Agreement statistics may be
+inappropriate \cite{mcdonald2019reliability,braun2019reflecting} & Report the
+analytic approach and how rigour was pursued instead \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Interpret the value in context.} The verbal bands commonly
+attached to $\kappa$ (``moderate'', ``substantial'') were offered by their
+authors as arbitrary conveniences \cite{landis1977measurement}, and
+Krippendorff's often-cited guidance to rely on variables with
+$\alpha\geq.800$ and to draw only tentative conclusions from those between
+.667 and .800 was offered for content analysis in general
+\cite{krippendorff2018content}. Neither is a pass mark. What matters is the
+consequence of the residual disagreement for the use to which the ratings are
+put, and for that the confidence interval is as important as the point
+estimate. Table~\ref{tab:kappa} in the Appendix shows that with a hundred
+double-coded items, a common size for a validation subset in HRI, an observed
+$\kappa$ of .60 is compatible with true values from roughly .44 to .74 when
+categories are balanced, and with a much wider range when one category is
+rare.
+
+\paragraph{Watch prevalence.} The categories of greatest interest in HRI are
+often rare: the unsafe utterance, the distressed child, the hazardous motion.
+When a category is rare, raters who agree on nearly every item can have a low
+$\kappa$, and, conversely, high raw agreement can conceal an inability to
+agree on the rare cases at all \cite{feinstein1990high,byrt1993bias}. A
+robot-led assessment of children's wellbeing with a vision-language model
+illustrates the point from the model's side: the model agreed with a
+psychologist on about 82\% of the items where no concern was coded, but on
+only about 13\% of the items where a concern was coded, for a Cohen's
+$\kappa$ of .22 \cite{abbasi2025robotled}. Overall agreement would have
+suggested a serviceable instrument. Per-category agreement showed one that
+missed most of what it was deployed to find.
+
+\paragraph{Decide what disagreement means.} For some constructs disagreement
+between raters is noise to be reduced by training and a sharper codebook. For
+others, including many that HRI cares about (was that response empathic? was
+that interruption rude? was that gesture appropriate?), disagreement reflects
+real differences between people and cultures, and collapsing it into a
+majority label discards information and installs one group's view as ground
+truth \cite{aroyo2015truth,plank2022problem,uma2021learning}. For such
+constructs we recommend reporting the distribution of ratings, recruiting
+raters from the populations the robot is meant to serve, and evaluating
+models against the distribution (Section~\ref{sec:perspectivist}).
+
+Two further points concern who the raters are. Expertise should match the
+construct: the clinical appropriateness of a wellbeing robot's response is a
+matter for clinically trained raters, and lay raters have been shown to be
+unreliable judges even of whether text was written by a person
+\cite{clark2021all} and of the quality of open-ended generated text
+\cite{karpinska2021perils}. And raters should be blind to the source of what
+they rate (model or human, and which condition), since knowledge of the
+source shapes judgement.
+
+\subsection{Validate Automated Evaluators Before Relying on Them}
+
+\begin{practice}{bp:validate}{Validate every automated evaluator against the human reference}
+Before a metric, a model judge, or a model annotator is used to support a
+claim, demonstrate on held-out, human-rated material from the study's own
+domain that it agrees with people about as well as people agree with each
+other.
+\end{practice}
+
+Automatic evaluation is attractive in HRI for the same reason as elsewhere:
+human rating is slow and expensive. Its history in dialogue research is a
+caution. Word-overlap metrics imported from machine translation were found to
+correlate weakly or not at all with human judgements of dialogue responses
+\cite{liu2016how}, yet were reported for years. Model-based judges are far
+more capable, and on some tasks reach agreement with human preferences
+comparable to agreement between humans \cite{zheng2023judging,chiang2023can}.
+But the evidence for them is uneven across tasks: a study spanning twenty NLP
+datasets found large variation in how well model judgements tracked human
+ones and concluded that judges need to be validated for each task before use
+\cite{bavaresco2025llms}. Judges also have systematic biases, including
+sensitivity to the order in which candidates are presented
+\cite{wang2024large}, a preference for text produced by the judging model
+itself \cite{panickssery2024llm}, and a range of other cognitive-bias
+analogues \cite{koo2024benchmarking}.
+
+None of the published validations covers the constructs that HRI most often
+asks a judge to score, such as social appropriateness in a physical context,
+fidelity to a therapeutic technique, or consistency between an utterance and
+what the robot's body is doing, nor the inputs HRI most often supplies, such
+as transcripts of recognised speech with errors, or video of a robot and a
+person. A judge's validity is specific to the construct, the rubric, the
+prompt, and the kind of material. It has to be established locally, on the
+study's own data, with the study's own rubric, and the role-specific
+practices for Annotators and Judges (\bpr{bp:coder}, \bpr{bp:judge}) say how.
+
+\subsection{Quantify Uncertainty and Plan for Precision}
+
+\begin{practice}{bp:uncertainty}{Report uncertainty and size evaluations deliberately}
+Attach an interval to every component-level estimate, choose the number of
+items, trials, raters, and runs in advance on the basis of the precision
+required, and analyse nested data as nested.
+\end{practice}
+
+Component-level results in HRI papers are frequently single numbers from
+small samples. The statistical literatures of both NLP and robot learning have
+argued at length that this is inadequate: significance testing and power
+analysis are underused in NLP \cite{dror2018hitchhiker,card2020little}, model
+evaluations are experiments whose results need standard errors
+\cite{miller2024adding}, and reports of robot policy performance from a
+handful of trials do not support the comparisons drawn from them
+\cite{kressgazit2024robot,agarwal2021deep}. Table~\ref{tab:cp} in the Appendix
+makes the last point concrete.
+
+Two features of HRI data need particular care. The data are nested: turns
+within sessions within participants, trials within objects within scenes.
+Treating five hundred robot utterances from twenty participants as five
+hundred independent observations overstates precision; mixed-effects models
+or cluster bootstraps are the appropriate tools, as they are for the
+participant-level outcomes of the same studies. And evaluation sets are
+typically built after the fact from whatever the study produced. Deciding in
+advance how many items will be double-coded, how they will be sampled
+(stratified by session, participant, and condition, with over-sampling of rare
+categories), and what interval width is acceptable turns validation from a
+ritual into a measurement.
+
+\subsection{Disaggregate}
+
+\begin{practice}{bp:subgroup}{Report performance for the groups of people the robot serves}
+Break component-level performance down by participant characteristics
+relevant to the application, and test whether error rates differ.
+\end{practice}
+
+Aggregate performance can hide failure concentrated in a subgroup, and
+embodiment gives such failure direct consequences. Robots driven by
+foundation models have been shown to act on social stereotypes
+\cite{hundt2022robots}, and LLMs prompted in HRI scenarios produce
+discriminatory outputs across protected characteristics and accept harmful
+instructions \cite{hundt2025llm}. In the child wellbeing assessment discussed
+above, the vision-language model's false-positive rate was significantly
+higher for girls than for boys, so that it failed the equalised-odds criterion
+even when gender was not mentioned in the prompt \cite{abbasi2025robotled}.
+Speech recognition, which sits upstream of most spoken HRI, has well-documented
+disparities by speaker group \cite{koenecke2020racial}, and an error there
+becomes an error in everything the language model does next. HRI samples are
+small and not diverse \cite{seaborn2023not}, which limits what
+disaggregation can show; but reporting the breakdown, with intervals, allows
+later synthesis, and its absence should be stated as a limitation and not
+passed over.
+
+\subsection{Characterise Failures, Not Only Averages}
+
+\begin{practice}{bp:failures}{Report an error taxonomy, severity, and the worst cases}
+Classify the model's errors by type and by severity for the person, report the
+frequency of each, and describe the most serious individually.
+\end{practice}
+
+A mean rubric score of 4.3 out of 5 is uninformative about whether the robot
+once told a participant something dangerous. HRI has taxonomies of robot
+failure and of social error that can be extended to generative components
+\cite{honig2018understanding,tian2021taxonomy}, and the NLP literature
+supplies taxonomies of hallucination \cite{ji2023survey}. Failure modes that
+studies of LLM-driven robots have documented, and that a taxonomy for HRI
+should therefore include, are fabricated facts and memories, claims to
+capabilities or experiences the robot does not have, loss of persona or of
+conversational context, responses that are too long or too late for spoken
+interaction, misrecognised speech treated as intended, and inappropriate
+advice \cite{irfan2025between,ashok2026why}. For action models the
+corresponding list includes hesitation, motion that is successful but
+illegible or alarming, and task success achieved in a way that would be
+unacceptable around a person \cite{guan2024task}. Severity should be rated
+separately from frequency and with reference to the population: the same
+error has different weight for a student volunteer and for a person with
+dementia.
+
+\subsection{Connect the Levels}
+
+\begin{practice}{bp:levels}{Audit what participants actually received, and measure the system around the model}
+Log every model output delivered in the study and evaluate those outputs, or a
+defined sample of them, at component level; report system-level properties
+that mediate between model and person; and verify manipulations in the
+delivered outputs.
+\end{practice}
+
+This practice answers the two inferential leaps of
+Section~\ref{sec:levels}. Against the downward leap, it requires that
+outputs produced \emph{in situ} be audited, since outputs produced at the
+desk before the study are not the outputs participants heard. A generative
+model makes every participant's interaction different; the audit is the only
+means of knowing what the ``treatment'' was. It also supplies the
+manipulation check that experimental method requires
+\cite{hoffman2020primer}: if two conditions differ in a prompt intended to
+make the robot more empathic, the audit should show that raters blind to
+condition find its utterances more empathic.
+
+Against the upward leap, it requires measurement of what lies between model
+and person. Response latency is the clearest case. Gaps between turns in
+human conversation are typically a few hundred milliseconds across languages
+\cite{stivers2009universals}, and timing is central to how spoken interaction
+with machines is experienced \cite{skantze2021turn}; a pipeline of speech
+recognition, a hosted model, and speech synthesis commonly takes several
+times longer, and the delay, the filler that masks it, and the interruptions
+it causes are part of the stimulus. The distribution of latency, and not only
+its mean, should be reported. So should the word error rate of the speech
+recogniser in the study's acoustic conditions and with the study's
+population, since recognition errors are a leading cause of breakdown in
+LLM-driven conversation with older adults \cite{irfan2025between}.
+
+Where a human supervises the robot, their interventions are data. Riek's
+guidelines for Wizard-of-Oz studies asked authors to report what the wizard
+could do, what they did, and how they were trained \cite{riek2012wizard}.
+Supervised autonomous systems need the equivalent: under what conditions the
+supervisor could veto, edit, or replace an output, how often they did, and
+why. The intervention rate is among the most informative system-level
+measures of a generative component's readiness, and it is almost free to
+collect.
+
+\subsection{Preserve, Share, and Pre-Specify}
+
+\begin{practice}{bp:open}{Archive the materials and fix the evaluation plan in advance}
+Preserve prompts, configurations, interaction logs, rater data, and judge
+outputs; share what consent and privacy allow; and specify prompts, rubrics,
+judges, validation subsets, and thresholds before the evaluation is run.
+\end{practice}
+
+Generative models multiply the analytic choices available to a researcher.
+The prompt can be reworded, the model swapped, the temperature changed, the
+rubric adjusted, the judge replaced, each change producing a somewhat
+different result. The lesson of the replication crisis in psychology is that
+undisclosed flexibility of this kind reliably produces false positives
+\cite{simmons2011false}, and a large-scale replication exercise has shown
+that the choice among defensible LLM annotation configurations can by itself
+flip the conclusions of downstream analyses \cite{baumann2025large}.
+Pre-registration, the remedy psychology adopted \cite{nosek2018preregistration},
+transfers directly: the prompt, the model, the rubric, the validation sample,
+and the agreement threshold can be fixed and time-stamped before the model is
+run on the study data. Prompt development is legitimate, but it should be
+done on separate material, and the paper should say so.
+
+Preservation matters more than usual because the model itself cannot be
+archived when it is hosted. The interaction logs then become the only
+permanent record of what the system did, and a set of archived contexts is
+what makes later comparison with a successor model possible
+(Section~\ref{sec:replay}). HRI's reproducibility agenda already calls for
+sharing code, materials, and data \cite{gunes2022reproducibility}; for
+studies with generative models the minimum addition is the complete prompt
+set and, where consent permits, de-identified logs. Sending participants'
+speech, images, or disclosures to a third-party model provider is a
+data-protection matter that belongs in ethics review and in the consent form,
+and is a reason, alongside reproducibility, to consider locally run
+open-weight models where they are adequate to the role, as was done for the
+assessment of children's narratives cited above \cite{abbasi2025robotled}.

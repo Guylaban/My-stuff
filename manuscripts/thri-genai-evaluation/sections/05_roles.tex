@@ -1,0 +1,435 @@
+\section{Practices for Each Role}
+\label{sec:rolepractices}
+
+The fourteen practices in this section are specific to roles. Each adapts the
+tradition named in Table~\ref{tab:roles} to the conditions of HRI.
+
+\subsection{R1 Perceiver}
+
+\begin{practice}{bp:perceiver}{Evaluate a perceiving model as a measurement instrument}
+Report per-class performance against a reference produced by more than one
+qualified rater, express model--human agreement relative to human--human
+agreement, and, where the output will inform decisions about a person, meet
+the standard expected of an assessment tool.
+\end{practice}
+
+Language and vision-language models are used to infer what a robot cannot
+sense directly: emotion from a face or a transcript, engagement from video,
+intent from an ambiguous request, wellbeing from a child's narrative. This is
+classification or scoring, and the email-thread intuition that it ``looks like
+evaluating a classification model'' is right, with three qualifications that
+the affective-computing and psychometric literatures supply.
+
+First, the reference labels are themselves judgements. For affect,
+engagement, and rapport there is no instrument-independent truth, only what
+trained observers or the person themselves report, and these disagree. The
+model cannot be expected to agree with the reference more than the reference
+agrees with itself, so human--human agreement must be measured and reported
+as the ceiling (\bpr{bp:human}). A reference produced by a single rater, a
+frequent economy, makes the ceiling unknown and the model's score
+uninterpretable; the authors of the child wellbeing study name their single
+psychologist rater as a principal limitation for this reason
+\cite{abbasi2025robotled}.
+
+Second, class imbalance is the norm, so accuracy is uninformative and
+per-class precision, recall, and agreement are required (\bpr{bp:human},
+\bpr{bp:subgroup}).
+
+Third, what the model is given matters as much as which model it is. A model
+may receive raw video, a transcript, or features extracted by an upstream
+component, such as valence and arousal values computed from facial
+expressions and passed to a language model as numbers \cite{mehra2025how}.
+Each arrangement has a different error profile, and the evaluation should be
+of the arrangement used on the robot, with the robot's sensors, viewpoint,
+and lighting, and not of the model on a curated benchmark.
+
+When a Perceiver's output is used to draw conclusions about an individual
+(screening, assessment, adaptation of an intervention), the relevant standard
+is that of psychological testing: evidence of reliability, of validity
+against an external criterion, and of fairness across groups, for the
+intended use and population \cite{aera2014standards}. A model that performs
+``reasonably'' on average does not meet it.
+
+\subsection{R2 Representer}
+
+\begin{practice}{bp:embed}{Show that structure derived from embeddings is not an artefact of the embedding}
+When embeddings are used to cluster, compare, or measure similarity, repeat
+the analysis with more than one embedding model, calibrate similarity against
+an empirical null, test the stability of clusters, and have people check the
+resulting structure.
+\end{practice}
+
+Embeddings have become a standard analytic instrument in HRI as elsewhere:
+utterances are embedded, clustered into themes, and the themes labelled by a
+language model; or the similarity of two sets of texts is taken as a measure
+of how alike two conditions, partners, or populations are. The approach
+scales to corpora that could not be coded by hand, and it has produced
+findings about what people disclose to robots that would otherwise be
+unavailable \cite{chiang2025selfdisclosure,laban2025what}. Its validity rests
+on four checks.
+
+\emph{Triangulation.} Cosine similarity is defined relative to an embedding
+space. Contextual embedding spaces are anisotropic, so that even unrelated
+texts have high cosine similarity in some models
+\cite{ethayarajh2019how}, whereas models trained with a sentence-similarity
+objective spread texts more widely \cite{reimers2019sentence}. The same pairs
+of disclosures were found to have mean similarity below .50 in one family and
+above .80 in two others \cite{chiang2025selfdisclosure}. Conclusions should
+therefore be reported for at least two embedding families, and those that
+hold in only one should be flagged.
+
+\emph{Null calibration.} For the same reason, fixed thresholds are not
+portable. The reference point for an observed similarity is the distribution
+of similarity between randomly paired items in the same space, or under
+permutation of the grouping variable, and the result is best expressed as a
+standardised difference from that null.
+
+\emph{Stability.} A clustering is one of many that an algorithm could have
+returned. The number of clusters, the random initialisation, and the sample
+all move the partition. Reporting how well the clusters are recovered across
+seeds and bootstrap resamples, for example by the mean adjusted Rand index or
+cluster-wise Jaccard similarity \cite{hennig2007cluster}, distinguishes
+structure in the data from structure in the run.
+
+\emph{Human check.} Automatically generated cluster labels are fluent whether
+or not the cluster is coherent. Topic-model research met this problem and
+devised intrusion tasks, in which people try to spot the item that does not
+belong \cite{chang2009reading}. The same test applies to embedding clusters,
+alongside a conventional check in which two coders assign a sample of items
+to the labelled themes. An automated check that each generated description
+lies closest to its own centroid, as used in the studies above, is a useful
+necessary condition and costs nothing; it is not a substitute.
+
+\begin{practice}{bp:memory}{Evaluate retrieval and memory as retrieval}
+When embeddings select what the robot remembers or retrieves, report
+retrieval quality and the rate of retrieving material that should not have
+been retrieved, including material about a different person.
+\end{practice}
+
+Long-term interaction increasingly relies on retrieval: past conversations or
+user facts are embedded, and the most similar are inserted into the prompt.
+The retrieval step is an information-retrieval system and can be evaluated as
+one, with precision and recall against human judgements of relevance, and
+with the faithfulness of the generated response to what was retrieved
+\cite{es2024ragas}. HRI adds a failure with social and legal weight:
+retrieving one person's disclosure into a conversation with another, in a
+household or care home where a robot serves several people. The rate of such
+cross-person retrieval should be measured directly.
+
+\subsection{R3 Decider}
+
+\begin{practice}{bp:decider}{Evaluate decisions against expert decisions, and evaluate whether the model knows when not to decide}
+Compare the model's choices with those of qualified people in the same
+situations using agreement statistics, report violations of stated
+constraints, and measure whether the model's abstentions and requests for
+help are calibrated to its uncertainty.
+\end{practice}
+
+Models decide which skill to execute, which tool to call, and what to do
+next in a task plan \cite{ahn2022do,liang2023code}; in social robots they
+also decide when to take a turn \cite{skantze2025applying}, and whether a
+situation calls for help, silence, or intervention
+\cite{tanneberg2024help}. Such decisions are sometimes verifiable (a plan is
+executable or not) and sometimes normative (it was or was not appropriate to
+interrupt). For the normative kind, the evaluation is a comparison with
+people's decisions in the same situations, subject to everything said about
+human references above; work that elicits human explanations of why an
+action is or is not socially appropriate shows one way to build such a
+reference \cite{dogan2025grace}.
+
+Two cautions apply. A model that predicts human preferences well on
+vignettes has been proposed as a zero-shot human model for planning
+\cite{zhang2023large}, but apparent social reasoning can be brittle:
+performance on theory-of-mind style judgements in HRI scenarios degraded
+under perturbations that should not have mattered \cite{verma2024theory}.
+Decisions should therefore be tested under perturbation of irrelevant
+context as well as on canonical cases. And a Decider should be evaluated on
+its uncertainty, because the safe response to ambiguity in HRI is usually to
+ask. Conformal prediction has been used to make an LLM planner request human
+help at a rate tied to a specified level of task success
+\cite{ren2023robots}. Whether or not such machinery is used, the rate at
+which the robot asked when it should have, and did not ask when it need not
+have, is a reportable property with a direct bearing on the interaction.
+
+\subsection{R4 Speaker}
+
+\begin{practice}{bp:rubric}{Rate delivered language on a rubric that covers what embodiment adds}
+Have trained raters rate the robot's utterances for relevance, correctness,
+safety, and transparency, and also for grounding in the robot's body and
+situation, consistency of persona, fitness for the population, and fitness
+for speech.
+\end{practice}
+
+The four criteria named in the discussion that prompted this article
+(relevance, correctness, safety, transparency) are the core of any rubric
+for user-facing language, and each needs an operational definition, since
+reviews of NLG evaluation show that criteria with the same name are defined
+in incompatible ways across papers \cite{howcroft2020twenty}. For a robot
+the rubric needs four further criteria that text-only evaluation omits.
+
+\emph{Embodied grounding.} Does the utterance cohere with what the robot can
+perceive and do? LLM-driven robots claim to see what they cannot see, promise
+actions they cannot take, and refer to shared experiences that never
+happened \cite{irfan2025between,ashok2026why}. This is hallucination in the
+NLP sense \cite{ji2023survey}, but its reference is the robot's own body and
+history, which no general-purpose factuality metric checks.
+
+\emph{Persona consistency.} Does the robot remain the character it was
+designed to be, across turns and sessions? Drift of persona is a known
+property of long conversations with language models and was among the main
+concerns of HRI experts consulted on prompt design \cite{ashok2026why}.
+
+\emph{Fitness for the population.} Is the language appropriate for the
+person addressed: a child, an older adult, someone disclosing distress? For
+specialist content the raters must be specialists, and psychosocial risk
+(manipulation, psychological harm, privacy violation, discrimination, insult)
+deserves its own dimensions \cite{luo2026dialogguard}.
+
+\emph{Fitness for speech.} Is the utterance of a length, structure, and
+register that works when spoken by this voice at this speed? A response
+that reads well can be unlistenable.
+
+\begin{practice}{bp:humanref}{Compare with what a qualified human would have said}
+Where a claim concerns the quality of the robot's language, collect responses
+to the same contexts from qualified people and have raters blind to source
+rate both.
+\end{practice}
+
+Absolute ratings are hard to interpret: is 3.9 out of 5 for empathy good? A
+human reference gives the scale meaning. The strongest design presents
+raters with model-generated and human-authored responses to identical
+contexts, unlabelled and in random order, and reports the difference with an
+interval. If the claim is that the model is as good as the human, the
+analysis is an equivalence test (Section~\ref{sec:equivalence}). The human
+authors should be the people whose performance is the relevant benchmark
+(counsellors for a counselling robot, teachers for a tutoring robot), and
+the comparison should be on the rubric's dimensions and not on whether
+raters can tell which is which, since indistinguishability to lay readers is
+weak evidence of quality \cite{clark2021all}. Where matched human responses
+cannot be collected, comparison with an existing corpus of professional
+practice is a scalable approximation, with limits discussed in
+Section~\ref{sec:alignment}.
+
+\subsection{R5 Behaviour Author}
+
+\begin{practice}{bp:observers}{Show that generated behaviour is perceived as intended}
+Test generated expressive behaviour with observers who are not told the
+intended meaning, report recognition against chance with the confusion
+pattern, and compare with behaviour authored by an expert.
+\end{practice}
+
+When a model generates a gesture, a facial expression, or a sequence of
+motions to express an internal state \cite{mahadevan2024generative,
+antony2025xpress}, the question is the one that HRI has always asked of
+designed behaviour: do people read it as intended? The method is established:
+naive observers view the behaviour and label it or rate it on dimensions such
+as valence and arousal, and recognition is compared with chance. A recent
+study of a low-degree-of-freedom robot is a reminder of what such tests tend
+to find: observers often recovered the broad affective meaning of an
+expression but not its specific label, and recognition varied widely by
+emotion \cite{rogel2026emotional}. Generated behaviour should be held to the
+same test before it is used as a manipulation, and the plausibility of the
+model's textual rationale for a behaviour should not be mistaken for evidence
+about the behaviour. Because generation is stochastic, the test should cover
+several generations per intended meaning (\bpr{bp:consistency}).
+
+\begin{practice}{bp:code}{Verify generated programs before they run on a robot near people}
+Report the rate at which generated code or parameters were executable,
+correct, and within safety constraints, and what stood between generation and
+execution.
+\end{practice}
+
+Models also write robot programs, from end-user tools that turn natural
+language into applications \cite{karli2024alchemist} to policies expressed as
+code \cite{liang2023code}. Software engineering supplies the standard:
+functional correctness on held-out tasks, and static or formal checks of
+properties that must always hold. HRI has methods for verifying social
+properties of interaction programs \cite{porfirio2018authoring}, and
+constraint layers that reject plans violating stated safety rules have been
+built for LLM-driven robots \cite{yang2024plug}. The evaluation should report
+how often generated programs failed each check, not only the performance of
+those that passed.
+
+\subsection{R6 Actor}
+
+\begin{practice}{bp:trials}{Evaluate action policies with enough trials, stated conditions, and reliable adjudication}
+Report the number of trials, how initial conditions were chosen and varied,
+the success criterion fixed in advance, success rates with intervals, who or
+what judged success and how reliably, and failures by type.
+\end{practice}
+
+The robot-learning community has articulated best practices for evaluating
+learned policies, including specifying initial conditions, running enough
+trials for statistical conclusions, reporting failure modes, and separating
+evaluators from developers \cite{kressgazit2024robot}, and has developed
+statistical tools for bounding performance from few trials
+\cite{vincent2024how} and for comparing policies with the fewest trials
+needed \cite{snyder2025your}. Simulation can rank real-world manipulation
+policies when it is built to correlate with reality \cite{li2024evaluating},
+and distributed and automated real-world evaluation is emerging for
+generalist policies \cite{atreya2025roboarena,zhou2025autoeval}. HRI studies
+using VLAs should adopt these practices as given. The addition from the
+psychological tradition is that success in a physical trial is a human
+judgement and should be treated as one: defined in a written criterion,
+adjudicated by two raters from video, with agreement reported. When a
+vision-language model is used as a success detector \cite{du2023vision}, it
+is a Judge and must be validated as such (\bpr{bp:judge}).
+
+\begin{practice}{bp:people}{Put people in the evaluation of action}
+Sample the variation that people introduce (their phrasing, positions,
+movements, and interruptions) and measure outcomes that matter to them
+(safety margins, legibility, comfort, effort) in addition to task success.
+\end{practice}
+
+Benchmarks for action models are overwhelmingly about objects on tables. A
+policy that will act around people must be evaluated around people, for two
+reasons. People are a source of distribution shift that object-centred
+evaluation does not sample: they phrase requests in their own way, move
+while the robot moves, reach in, change their minds. And task success is not
+the outcome that matters to them. A handover that succeeds after a hesitant,
+illegible approach, or a navigation that reaches its goal by cutting across
+a conversation, is a failure of interaction that a success rate records as a
+success; a study of video-language models as critics of agent behaviour was
+motivated by exactly this gap between task completion and acceptable
+behaviour \cite{guan2024task}. HRI has the constructs and measures needed,
+among them the legibility and predictability of motion
+\cite{dragan2013legibility}, perceived safety, and proxemic norms, and the
+safety-engineering tradition supplies physical limits for collaborative
+operation that hold regardless of what the policy intends
+\cite{iso15066}. Because VLAs inherit the language interface of their
+backbone, they also inherit its vulnerabilities, and instructions that would
+cause unsafe actions belong in the test set (Section~\ref{sec:redteam}).
+
+\subsection{R7 Annotator}
+
+\begin{practice}{bp:coder}{Treat a model that codes data as a coder}
+Develop the codebook with human coders, have at least two of them code a
+held-out subset, report model--human agreement next to human--human agreement
+with the same coefficient, and freeze the prompt before the model sees the
+data on which conclusions rest.
+\end{practice}
+
+Language models can match or exceed crowd workers on some annotation tasks
+\cite{gilardi2023chatgpt} and perform well on many computational social
+science tasks while remaining below fine-tuned models and human experts on
+others \cite{ziems2024can}. The methodological literature that followed is
+consistent on what this licenses: performance varies by task and by prompt
+and cannot be assumed, so every application requires validation against
+human-coded data from the same corpus
+\cite{pangakis2023automated,tornberg2024best}. For deductive qualitative
+coding, combining an expert-developed codebook with a language model has
+produced fair to substantial agreement with experts \cite{xiao2023supporting},
+and the codebook, as much as the model, determines the result
+\cite{dunivin2024scalable}.
+
+The content-analytic framing makes the requirements simple. The model is an
+additional coder. A coder is trained on material that is then set aside,
+tested on fresh material, and admitted to the study if agreement on the fresh
+material is adequate. Tuning the prompt on the same items used to report
+agreement is the equivalent of training and testing a coder on the same
+transcripts, and it inflates the estimate. The human--human coefficient on
+the validation subset is the benchmark, and the subset must be large enough
+for the coefficients to be estimated with useful precision
+(Table~\ref{tab:kappa}). For multimodal annotation, where a vision-language
+model codes gaze, gesture, or engagement from video, the requirements are the
+same, and published validations are fewer; HRI's own experience is that such
+agreement can be modest \cite{abbasi2025robotled}.
+
+Not all qualitative analysis is coding against a fixed scheme. In
+interpretive approaches such as reflexive thematic analysis, the analyst's
+subjectivity is a resource and inter-rater statistics are a category mistake
+\cite{braun2019reflecting,mcdonald2019reliability}. A model can assist such
+analysis, but claims that it has ``performed'' the analysis should be
+resisted; what can be reported is how the model was used, and how the
+analysts checked and departed from what it offered.
+
+\begin{practice}{bp:inference}{Carry annotation error into the statistics}
+When model-produced labels enter a statistical analysis, use a method that
+accounts for their error using the human-labelled subset, or show that
+conclusions are robust to it.
+\end{practice}
+
+Even a well-validated annotator makes errors, and errors that are correlated
+with the variables under study bias the estimates and tests computed from the
+labels. High agreement does not make the problem disappear. Methods now exist
+that combine a small set of human labels with a large set of model labels to
+produce estimates with valid confidence intervals: prediction-powered
+inference \cite{angelopoulos2023prediction}, design-based supervised learning
+for downstream regression \cite{egami2023using}, and procedures that route
+items to human coders according to the model's confidence
+\cite{gligoric2025can}. They suit HRI's typical situation of a few hundred to
+a few thousand items of which a subset can be double-coded. At the least, the
+main analysis should be repeated on the human-coded subset alone and any
+divergence reported.
+
+\subsection{R8 Judge}
+
+\begin{practice}{bp:judge}{Validate a model judge per construct, keep it independent, and probe its biases}
+Report judge--human agreement separately for each rubric dimension on
+held-out material, use a judge from a different model family than the system
+judged, test known biases, and keep humans as adjudicators of what the judge
+flags.
+\end{practice}
+
+A Judge differs from an Annotator in what it scores: the outputs of another
+model, usually against a rubric. The general evidence and its limits were
+reviewed under \bpr{bp:validate}. The specific practices are these. Agreement
+must be reported per dimension, because a judge that tracks human ratings of
+fluency may not track ratings of safety. The judge should not share a model
+family with the system it judges, given self-preference
+\cite{panickssery2024llm}. Scoring should follow an explicit rubric with
+reasoning elicited before the score \cite{liu2023geval}. Criteria should be
+expected to change as outputs are inspected, a phenomenon documented as
+criteria drift, which is a reason to iterate on the rubric with human raters
+before freezing it \cite{shankar2024who}. Panels of diverse judges can reduce
+the idiosyncrasy of any one \cite{verga2024replacing}. For multimodal
+material, vision-language judges have been found to track human preferences
+in pairwise comparison better than in absolute scoring
+\cite{chen2024mllm}, which favours comparative designs.
+
+An evaluation of multi-agent judging for psychosocial safety is instructive
+about trade-offs. Against human safety annotations, a pipeline in which a
+second model reviewed the first model's judgement was the most accurate and
+stable of four designs; a debate between adversarial models achieved
+near-perfect recall at the price of over-flagging borderline cases; and
+simple majority voting over repeated samples added little to a single
+judgement \cite{luo2025dialogguard}. The appropriate design depends on the
+cost of misses relative to false alarms, which in a Tier~III study is high
+enough to favour recall, with human review of what is flagged. The authors'
+conclusion, that judge scores are decision-support signals and not ground
+truth, and their formative study with practitioners who used the tool as a
+second opinion \cite{luo2026dialogguard}, describe the proper standing of a
+Judge in HRI: a means of directing human attention, not of replacing it.
+
+\subsection{R9 Simulator}
+
+\begin{practice}{bp:simulator}{Use simulated people to stress systems, not to stand in for participants}
+Restrict simulated users, partners, and raters to piloting, coverage testing,
+and stress-testing; validate the simulator on the properties relied upon; and
+do not offer simulated responses as evidence about human experience.
+\end{practice}
+
+Language models conditioned on personas can reproduce some aggregate patterns
+of human survey responses and experimental effects
+\cite{argyle2023out,aher2023using}, which has prompted proposals to use them
+in place of participants \cite{dillion2023can}. The objections are by now
+well developed. Simulated respondents show less variance than people and
+their fidelity is unstable across prompts and over time
+\cite{bisbee2024synthetic}; they misportray and flatten the identity groups
+they are asked to represent \cite{wang2025large}; substituting them for
+participants conflicts with the values of representation and inclusion that
+motivate participatory research \cite{agnew2024illusion}; and they cannot
+give what a participant gives, a response grounded in an experience
+\cite{harding2024ai}. For HRI the last point is decisive. The discipline's
+subject is what happens when a person meets an embodied machine, and a
+language model has never met one.
+
+Simulation nonetheless has legitimate uses. Before participants are
+recruited, simulated users can exercise a dialogue system through many more
+conversations than a pilot would, exposing failure modes, persona drift, and
+unsafe responses. For this the simulator must itself be stable: multi-turn
+simulation suffers from persona drift and from agents echoing each other, and
+methods that address this have been evaluated with human validation
+\cite{luo2026spasm}. What is found in simulation is a hypothesis about what
+will happen with people, to be tested with people, and should be reported as
+such.

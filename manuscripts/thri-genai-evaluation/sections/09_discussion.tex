@@ -1,0 +1,168 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What Changes}
+
+The proposal of this article can be put in one sentence: decide what the
+model is doing, find the tradition that knows how to evaluate that, and
+gather evidence at the level of the claim. Three consequences follow for how
+HRI studies with generative models are designed and read.
+
+The first is that the question ``how should LLMs in HRI be evaluated?'' is
+replaced by nine narrower questions that have answers. The discussion from
+which this article arose observed that validating natural-language outputs
+against human outputs and evaluating a model's embeddings are different
+activities. The framework treats that observation as the general case. It
+also predicts where practice will be weakest: in roles whose tradition lies
+furthest from the training of the researchers using the model. Roboticists
+adopting language models for dialogue inherit obligations from NLG evaluation
+and psychometrics; social scientists adopting action models inherit
+obligations from robot learning. Neither group can be expected to know the
+other's standards unaided, which is the argument for writing them down
+together.
+
+The second is that the user study loses a job it was never suited to. HRI's
+strength is evidence about people, and nothing here diminishes it. But
+interaction-level outcomes do not certify the outputs that produced them, and
+a field that relies on them alone will accumulate findings about robots
+whose behaviour nobody examined. The audit of delivered outputs
+(\bpr{bp:levels}) is, in our view, the single most consequential addition to
+current practice, and one of the least expensive.
+
+The third is that model identity recedes. A study that reports its roles,
+its configuration, its component-level evidence, and its logs remains
+interpretable after the model it used has been withdrawn, because what it
+established is that a configuration with measured properties produced
+measured effects. A study that reports only that ``the robot used GPT-4''
+establishes nothing that outlasts the product.
+
+\subsection{Tensions}
+
+\paragraph{Rigour and cost.} Every practice here costs time, and HRI is a
+field of small laboratories. We have tried to keep the costs proportionate:
+the tier scheme asks little of exploratory work; most Tier~II requirements
+are met by two people independently rating a few hundred items, which is days
+of work in a study that took months; and several practices (logging,
+configuration reporting, intervention counts) cost almost nothing if planned
+from the start. The expensive practices are concentrated where the stakes
+are highest, which is where they should be. Shared infrastructure
+(Section~\ref{sec:infrastructure}) would reduce costs further, and we would
+rather see a modest standard widely met than an exacting one widely ignored.
+
+\paragraph{Capability and reproducibility.} The most capable models are
+usually proprietary, hosted, and transient, and the properties that make a
+robot's conversation fluid may not yet be available in models that can be
+archived. We do not think HRI should confine itself to open-weight models,
+but the reliance should be justified \cite{palmer2024using} and its
+consequences mitigated: dated snapshots, archived contexts for replay, and,
+for central findings, a replication with an open-weight model that shows
+whether the result depends on one vendor's product.
+
+\paragraph{Pace.} A model evaluated during data collection may be two
+generations old on publication. This is an argument for role-based evaluation
+and not against evaluation. Findings framed as ``model X can do Y'' are
+perishable. Findings framed as ``a Speaker meeting this component-level
+standard produced this effect in this population'' are not, and the standard
+gives successors something to be compared against.
+
+\paragraph{Ground truth.} For much of what HRI cares about there is no
+truth beyond human judgement, and human judgement varies. The practices here
+do not resolve that; they require that it be measured and reported, and that
+models not be credited with agreement beyond what people show among
+themselves. There is a risk that the availability of fluent automated judges
+will encourage the field to forget that the construct was contested in the
+first place.
+
+\paragraph{The regress of automation.} A model is evaluated by a judge model
+that was validated against human ratings that were perhaps assisted by a
+model. Each step is defensible and the chain as a whole can drift away from
+any human anchor. We suggest a simple rule: every evaluative chain must
+terminate in judgements made by identified people who saw the material, in a
+quantity sufficient to estimate their agreement.
+
+\paragraph{The ethics of evaluating.} Evaluation with people exposes them to
+the thing evaluated. The tier scheme, supervised autonomy, and red-teaming
+before exposure are intended to order the evidence so that the least
+protected participants meet the best-characterised systems. Evaluation also
+has costs for others: raters who audit outputs for harm are exposed to that
+harm, and participants' words and images may be sent to third parties to be
+processed. Both belong in ethics applications and in papers.
+
+\paragraph{End-to-end opacity.} The trend in robotics is towards policies
+that expose no intermediate outputs. As perception, decision, and action
+merge, the role-specific evaluations of the first three roles become
+unavailable, and what remains is the evaluation of behaviour over trials,
+which is the most expensive kind and the hardest to make cover the variation
+people introduce. This raises the importance of \bpr{bp:people} and of
+safety layers that do not depend on the policy, and it is a reason for HRI
+researchers to take part in defining how generalist policies are evaluated
+instead of receiving benchmarks designed without people in them.
+
+\subsection{Limitations}
+
+This article is a narrative synthesis by a single research perspective, and
+it has the limitations of the genre. The literature was not searched
+systematically, and the selection of practices reflects judgement about
+relevance. We have not shown empirically that following the practices
+improves the replicability or validity of HRI findings; that is a question
+for meta-research once reporting makes it answerable. The numerical
+suggestions (five runs, thirty trials, two hundred double-coded items) are
+defaults reasoned from the precision tables and should be replaced by
+calculations specific to a study. The examples are drawn mostly from dyadic,
+spoken, English-language interaction in social and assistive settings.
+Multi-party interaction and human-robot teams, in which a model's output
+affects several people who may disagree about what is appropriate, raise
+issues of evaluation that we have only touched on; so do industrial settings,
+languages and cultures other than those in which the models and most of the
+cited validations were developed, and deployments lasting years. Finally,
+the framework's categories will age. New architectures will produce roles
+that are not among the nine, and we expect the list to need revision sooner
+than the principle behind it.
+
+\subsection{An Agenda for the Community}
+
+A set of practices proposed in an article is not a standard. Standards in HRI
+have come from recommendations that the community debated, refined, and
+eventually expected of one another
+\cite{riek2012wizard,baxter2016characterising,schrum2023concerning}. We
+suggest five steps.
+
+\begin{enumerate}[leftmargin=1.6em]
+\item \emph{Establish a baseline.} Apply the checklist of
+Table~\ref{tab:checklist} to a recent year of papers at the principal HRI
+venues that use generative models in any role, including analysis roles, to
+establish what is currently reported. Without a baseline, neither the need
+for standards nor their effect can be demonstrated.
+\item \emph{Seek structured consensus.} Refine the roles, tiers, and
+checklist through a consensus process that includes researchers from the
+field's constituent disciplines, practitioners in the application domains,
+and people from the populations that robots are built for. The health
+sciences have developed reporting guidelines in this way, and the method
+suits a field as heterogeneous as HRI.
+\item \emph{Build shared validation resources.} Assemble and maintain
+multiply rated collections of HRI material for the constructs most often
+judged automatically, with documented rater populations, so that judge
+validation becomes a matter of days.
+\item \emph{Adopt gradually at venues.} Invite the checklist as optional
+supplementary material, give reviewers the five questions of
+Section~\ref{sec:reporting}, and recognise archived prompts and logs as
+research artefacts.
+\item \emph{Keep the guidance current.} Maintain the practices as a
+versioned, public document that a standing group revises as architectures
+and evidence change.
+\end{enumerate}
+
+\section{Conclusion}
+
+Generative models will keep changing faster than any standard written about
+them. What they are asked to do in and around robots changes far more
+slowly: to perceive people, to represent what was said, to decide, to speak,
+to author behaviour, to act, and, in the laboratory, to code, to judge, and
+to simulate. Each of these roles has a tradition that knows what adequate
+evidence looks like. Human-robot interaction, which has always borrowed its
+methods from several disciplines and made them work together around an
+embodied machine and a person, is well placed to do the same for generative
+models. The practices proposed here are an attempt at that integration:
+evaluate the role and not the model; match the evidence to the level of the
+claim; anchor every automated judgement in reliable human judgement; and
+report enough that the work can be understood when the model is gone.

@@ -1,0 +1,33 @@
+\begin{abstract}
+Large language models, vision-language models, and vision-language-action
+models are now routinely placed inside robots that talk to, perceive, and act
+around people, and inside the research pipelines that study those robots. The
+human-robot interaction (HRI) community has no shared standard for evaluating
+them. Practices imported from the wider AI community, such as model-as-judge
+scoring or human validation of outputs, are applied unevenly, and they answer
+different questions depending on what the model is doing in the robot: text
+that a robot speaks directly to a person must be judged for relevance,
+correctness, safety, and transparency, whereas an embedding that feeds a
+downstream decision is evaluated much like a classifier. This article argues
+that a single standard is neither achievable nor desirable, and that the unit
+of evaluation should be the \emph{role} a model plays, not the model. We
+distinguish nine roles, six inside the robot's interaction loop (perceiver,
+representer, decider, speaker, behaviour author, actor) and three inside the
+research pipeline (annotator, judge, simulator), and four levels at which
+evidence can be gathered (component, system, interaction, deployment). For
+each role we identify the evaluation tradition it inherits: human evaluation
+and meta-evaluation from natural language processing, inter-rater reliability
+and validity theory from psychology and content analysis, and trial-based
+policy evaluation and safety analysis from robotics. From these we derive 24
+best practices, ten that apply to every study and fourteen that are specific
+to a role, scaled by a three-tier scheme that ties the required evidence to
+who is exposed to the model's output and what can go wrong. We then describe
+practices that are new or newly feasible, including ceiling-referenced
+agreement, equivalence testing for substitution claims, generalisability
+designs that treat model runs and prompts as raters, frozen-interaction
+replay, and reference-corpus alignment, and we provide worked examples,
+precision-planning tables for validation subsets and physical trials, and a
+reporting checklist for authors and reviewers. The aim is a common vocabulary
+that lets HRI studies using generative models be compared, replicated, and
+trusted in proportion to the evidence they report.
+\end{abstract}

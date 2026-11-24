@@ -1,0 +1,62 @@
+\section{Precision-Planning Tables}
+\label{app:precision}
+
+The two tables below were computed with the script
+\texttt{supplementary/precision\_planning.py} distributed with this article.
+They are intended for planning the size of an evaluation before it is run, and
+for reading the uncertainty of an evaluation that has already been reported.
+
+Table~\ref{tab:cp} gives exact (Clopper--Pearson) 95\% confidence intervals
+for a success proportion estimated from $n$ independent physical trials. Ten
+trials with seven successes are compatible with a true success rate anywhere
+between 35\% and 93\%; two policies evaluated on ten trials each therefore
+cannot be ranked unless one succeeds almost always and the other almost never.
+
+\begin{table}[h]
+\caption{Exact 95\% confidence intervals for a success rate estimated from $n$
+independent trials, at three observed success rates.}
+\label{tab:cp}
+\begin{tabular}{rccc}
+\toprule
+$n$ & Observed 50\% & Observed 70\% & Observed 90\% \\
+\midrule
+10  & [.19, .81] & [.35, .93] & [.55, 1.00] \\
+20  & [.27, .73] & [.46, .88] & [.68, .99] \\
+50  & [.36, .64] & [.55, .82] & [.78, .97] \\
+100 & [.40, .60] & [.60, .79] & [.82, .95] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:kappa} gives the central 95\% range of the estimate of Cohen's
+$\kappa$ between a model and a human reference coder on a validation subset of
+$n$ items, obtained from 20{,}000 simulated validation subsets per cell. Both
+coders are assumed to have the same marginal prevalence of the positive class.
+Two features matter for planning. First, when the positive class is rare, raw
+agreement is high even when chance-corrected agreement is mediocre: with 10\%
+prevalence, $\kappa=.40$ corresponds to 89\% raw agreement. Second, rare
+classes make the estimate much less precise: with 10\% prevalence and a true
+$\kappa$ of .60, a 50-item subset can return anything from chance-level to
+near-perfect agreement, and roughly 400 items are needed before the range
+excludes values that would change the conclusion.
+
+\begin{table}[h]
+\caption{Central 95\% range of estimated Cohen's $\kappa$ for a validation
+subset of $n$ items, by true $\kappa$ and prevalence of the positive class
+(Monte Carlo, 20{,}000 replications per cell). ``Raw'' is the expected
+proportion of items on which the two coders agree.}
+\label{tab:kappa}
+\begin{tabular}{ccccccc}
+\toprule
+Prevalence & True $\kappa$ & Raw & $n=50$ & $n=100$ & $n=200$ & $n=400$ \\
+\midrule
+\multirow{3}{*}{.50} & .40 & .70 & [.13, .64] & [.22, .58] & [.27, .52] & [.31, .49] \\
+                     & .60 & .80 & [.36, .80] & [.44, .74] & [.48, .71] & [.52, .68] \\
+                     & .80 & .90 & [.62, .96] & [.67, .90] & [.71, .88] & [.74, .86] \\
+\midrule
+\multirow{3}{*}{.10} & .40 & .89 & [$-$.06, .79] & [.07, .67] & [.17, .59] & [.25, .54] \\
+                     & .60 & .93 & [$-$.02, .92] & [.27, .84] & [.39, .77] & [.46, .72] \\
+                     & .80 & .96 & [.37, 1.00] & [.54, 1.00] & [.63, .93] & [.69, .89] \\
+\bottomrule
+\end{tabular}
+\end{table}

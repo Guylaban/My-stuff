@@ -1,0 +1,97 @@
+\section{Reporting Checklist and Questions for Reviewers}
+\label{sec:reporting}
+
+Table~\ref{tab:checklist} consolidates the practices into a checklist that
+authors can complete and attach as supplementary material, in the manner of
+the reproducibility checklists that machine-learning venues adopted
+\cite{pineau2021improving} and of the documentation formats proposed for
+models and datasets \cite{mitchell2019model,gebru2021datasheets}. It extends,
+and does not replace, the reporting guidance that HRI already has for
+experiments \cite{hoffman2020primer,baxter2016characterising}, for
+Wizard-of-Oz studies \cite{riek2012wizard}, and for prompts in LLM-based HRI
+\cite{ashok2026why}. Items are marked with the tier from which they are
+expected. ``Not applicable'' is an acceptable answer if a reason is given;
+silence is not.
+
+\begin{table}[p]
+\caption{Reporting checklist for HRI studies that use language, vision, or
+action models. The tier (Table~\ref{tab:tiers}) from which each item is
+expected is given on the right.}
+\label{tab:checklist}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}rYc@{}}
+\toprule
+ & Item & Tier \\
+\midrule
+\multicolumn{3}{@{}l}{\textbf{A. Role, level, claim}} \\
+1 & Every role each model plays (\role{1}--\role{9}), including roles in the analysis pipeline & I \\
+2 & The level(s) of evidence reported (component, system, interaction, deployment) and the claim each supports & I \\
+3 & The tier assigned to the study and the reason & I \\
+\multicolumn{3}{@{}l}{\textbf{B. Model and configuration}} \\
+4 & Provider, model name, dated snapshot or weights hash, access route, and dates of data collection & I \\
+5 & Sampling parameters (temperature, top-$p$, seed if any, output limits) and any provider-side defaults that could not be controlled & I \\
+6 & Full system prompt and prompt templates, verbatim, with the structure of injected context (history window, memory, retrieved content, sensor descriptions) & I \\
+7 & Guardrails, filters, post-processing, and fallback behaviour; for spoken interaction, the speech recogniser and synthesiser & I \\
+8 & For action models: checkpoint, fine-tuning data, embodiment, control frequency, and safety layers between policy and motors & I \\
+\multicolumn{3}{@{}l}{\textbf{C. Consistency}} \\
+9 & Number of repeated runs per input and the run-to-run consistency of outputs or scores & II \\
+10 & Sensitivity to prompt wording, or a statement that only one wording was tested & II \\
+\multicolumn{3}{@{}l}{\textbf{D. Human reference}} \\
+11 & Who the raters or coders were, their expertise and training, how many rated each item, and whether they were blind to source and condition & II \\
+12 & The codebook or rubric, verbatim & II \\
+13 & The reliability coefficient, why it suits the data, its value with a confidence interval, and how disagreements were resolved & II \\
+14 & For rare categories: prevalence and per-category agreement, not only overall agreement & II \\
+\multicolumn{3}{@{}l}{\textbf{E. Automated evaluators and annotators}} \\
+15 & Judge or annotator model and prompt, reported as in B, and its independence from the system evaluated & II \\
+16 & Size and sampling of the human-labelled validation subset, and confirmation that it was not used to develop the prompt & II \\
+17 & Model--human agreement next to human--human agreement on the same items with the same coefficient & II \\
+18 & How model-produced labels entered the statistical analysis and whether inference was corrected for labelling error & II \\
+\multicolumn{3}{@{}l}{\textbf{F. Component-level results}} \\
+19 & Role-appropriate performance with uncertainty intervals; for physical trials, the number of trials, initial conditions, and success criterion & II \\
+20 & Audit of the outputs delivered to participants: sampling, error taxonomy, frequency and severity of each error type & II \\
+21 & Performance disaggregated by participant subgroup, language, or other relevant strata & III \\
+22 & Worst cases: the most serious failures observed, described individually & III \\
+\multicolumn{3}{@{}l}{\textbf{G. System level}} \\
+23 & Distribution of end-to-end response latency and its handling in the interaction & II \\
+24 & Speech-recognition or perception error rates in the study conditions and how errors propagated & II \\
+25 & Supervision arrangement, and the number and kind of human interventions or overrides & II \\
+\multicolumn{3}{@{}l}{\textbf{H. Interaction level}} \\
+26 & What participants were told about the model's involvement and limitations & I \\
+27 & A manipulation check showing that the intended difference between conditions was realised in the delivered outputs & II \\
+28 & Analysis that respects nesting of turns within sessions within participants & II \\
+\multicolumn{3}{@{}l}{\textbf{I. Safety and ethics}} \\
+29 & Hazards anticipated for the role and population, safeguards, stopping rules, and adverse events observed & III \\
+30 & Adversarial or stress testing conducted before exposure to participants & III \\
+31 & What participant data were sent to third-party services, under what agreement, and how this was explained in consent & I \\
+\multicolumn{3}{@{}l}{\textbf{J. Openness}} \\
+32 & Availability of prompts, code, logs, rater data, and judge outputs, with privacy constraints stated & I \\
+33 & Pre-registration of the evaluation plan, including prompts, rubric, judge, and thresholds & III \\
+34 & A replication path that does not depend on a model that may be withdrawn (open-weight arm or archived interaction set) & III \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+For reviewers and editors, the framework reduces to five questions that can be
+asked of any submission, whatever model it uses.
+
+\begin{enumerate}[leftmargin=1.6em]
+\item \emph{What is the model doing?} If the roles cannot be reconstructed
+from the manuscript, nothing else can be assessed.
+\item \emph{Does the evidence match the role?} A Speaker evaluated only by
+accuracy, or a Perceiver evaluated only by whether its outputs ``looked
+plausible'', has been held to the wrong standard.
+\item \emph{Does the evidence match the level of the claim?} Benchmark
+results do not support interaction claims, and questionnaire results do not
+support claims about the correctness or safety of outputs.
+\item \emph{Has every automated evaluator been validated against people, and
+have the people been shown to agree with each other?}
+\item \emph{Could someone else rerun this in two years?} If the answer depends
+on a withdrawn model, are the logs and prompts sufficient to interpret the
+result without it?
+\end{enumerate}
+
+We suggest that venues ask for the checklist at submission without making
+any item a condition of acceptance at first. Experience with reproducibility
+checklists in machine learning suggests that the act of answering changes
+what authors do before the answers are ever used to reject a paper
+\cite{pineau2021improving}.
