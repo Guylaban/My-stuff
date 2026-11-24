@@ -156,11 +156,19 @@ archived contexts can be shared, so that different models and prompts are
 compared on identical situations drawn from real interactions with real
 populations, which no public benchmark currently offers.
 
+Replay of recorded field interactions has been used in HRI to evaluate a
+perception component: footage from a multi-day Wizard-of-Oz deployment in a
+café was replayed to a vision-language model to test whether it could read
+customers' readiness to be served \cite{bu2025using}. The same logic
+applies to any component whose input can be recorded.
+
 The limit of replay is that it is open-loop. It shows what a new model would
 have said at a given point in an old conversation, not how the conversation
 would then have gone. Replay therefore supports component-level and not
 interaction-level claims. For action models the analogue is evaluation in
-simulation built to correlate with real outcomes \cite{li2024evaluating},
+simulation built to correlate with real outcomes
+\cite{li2025evaluating,jain2026polaris}, or in learned world models
+validated against real evaluations \cite{geminirobotics2025evaluating},
 with a small frozen set of physical scenarios as an anchor, and the same
 caveat applies with greater force because physical interaction is
 closed-loop at every time step.
@@ -197,18 +205,35 @@ licensed by evidence from the last.
 
 Adversarial testing before release is standard for language models and is
 recommended by risk-management frameworks for generative AI
-\cite{nist2024generative}. Robots change what is at stake. Jailbreaking
+\cite{nist2024artificial}. Robots change what is at stake. Jailbreaking
 attacks devised for chatbots have been adapted to LLM-controlled robots and
 have elicited harmful physical actions from research and commercial
-platforms \cite{robey2025jailbreaking,zhang2025badrobot}; LLMs evaluated in
+platforms, in some settings with attack success rates of 100\%
+\cite{robey2025jailbreaking}, including through ordinary voice interaction
+\cite{zhang2025badrobot}; in an interactive simulator the most
+safety-conscious of the agents tested rejected only one in ten detailed
+hazardous tasks \cite{yin2024safeagentbench}; LLMs evaluated in
 HRI task scenarios have accepted instructions that were dangerous, unlawful,
 or discriminatory \cite{hundt2025llm}; and benchmarks of semantic safety for
-embodied models have been constructed from records of real injuries and from
-robot ``constitutions'' \cite{sermanet2025generating}. For robots in social
+embodied models have been constructed together with automatically generated
+robot ``constitutions'', the best of which still left roughly one case in
+six misaligned \cite{sermanet2025generating}. For robots in social
 and supportive roles, the hazards are psychosocial as much as physical:
 manipulation, the fostering of dependence, harmful advice, and breaches of
 confidence, for which multi-dimensional safety evaluation has begun to be
-developed \cite{luo2026dialogguard}.
+developed \cite{luo2026dialogguard}. Defences can be evaluated in the same
+way: a guardrail architecture reduced the execution of unsafe plans under
+worst-case jailbreak attacks from over 92\% to below 3\%
+\cite{ravichandran2026safety}, and stress tests need not put hardware or
+people at risk, since hard instructions can be generated automatically
+\cite{karnik2024embodied} and degradation under off-nominal conditions
+predicted from edited observations before any physical trial
+\cite{majumdar2025predictive}.
+
+A first study of this kind in HRI invited 21 students to try to make an
+LLM-driven social robot violate principles concerning attachment, freedom,
+and empathy, and identified five manipulation techniques
+\cite{abbo2025can}.
 
 We recommend that Tier~III studies include a documented red-team exercise
 before participants are exposed, and that Tier~II studies with unreviewed
@@ -231,7 +256,9 @@ specified in a prompt and maintained, or not, by the model across a
 conversation. HRI experts consulted on prompt design identified the
 legibility of the robot's personality, users' ability to adapt it, and
 safety, deception, and governance as their main concerns \cite{ashok2026why}.
-Stability can be measured. Probes of the persona's stated traits, knowledge,
+Drift is measurable and can be fast: adherence to a system-prompt persona
+declined significantly within eight rounds of conversation in two widely
+used models \cite{li2024measuring}. Stability can be measured. Probes of the persona's stated traits, knowledge,
 and boundaries are inserted at intervals in long simulated or replayed
 conversations, and the consistency of the answers is scored; the same
 conversations show whether the robot's account of its own nature and
@@ -245,7 +272,10 @@ caution against measuring a robot's ``personality'' by administering human
 personality inventories to the model: the psychometric properties of such
 inventories do not automatically transfer to language models
 \cite{suhr2025challenging}, and what matters for HRI is the persona that
-people perceive, which is an interaction-level question.
+people perceive, which is an interaction-level question. Studies of
+LLM-driven robot personalities that verify the perceived persona with
+participants before using it as an experimental manipulation show the
+appropriate order of work \cite{becker2025robots,jafari2026evaluating}.
 
 \subsection{Reference-Corpus Alignment}
 \label{sec:alignment}

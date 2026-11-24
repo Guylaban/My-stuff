@@ -1,0 +1,204 @@
+\section{Background: Current Practice and Existing Guidance}
+\label{sec:background}
+
+\subsection{What Generative Models Do in HRI}
+
+Within a few years, pretrained generative models have been put to almost
+every use that a robot architecture or an HRI study has for computation.
+They generate a social robot's speech, as in early open-dialogue systems for
+Pepper, NAO, and Furhat \cite{billing2023language,cherakara2023furchat} and
+in companion robots studied with older adults
+\cite{irfan2024recommendations,irfan2025between,lima2025promoting}. They
+generate expressive behaviour: gesture and motion as code
+\cite{mahadevan2024generative}, facial expressions
+\cite{antony2025xpress,mishra2023realtime}, and the body language of legged
+robots \cite{roy2025gpt}. They decide: which skill a robot should execute
+\cite{ahn2022do,liang2023code}, whether to help or stay silent in a group
+\cite{tanneberg2024help}, whether and how to initiate an interaction
+\cite{sasabuchi2025agreeing}, when to take a conversational turn
+\cite{skantze2025applying}, and whether a path through a crowd is socially
+acceptable \cite{song2025vlm}. They perceive: vision-language models give a
+shop robot awareness of its customers \cite{edirisinghe2026welcome} and read
+nonverbal cues of readiness to be served \cite{bu2025using}. They let end
+users program robots in natural language \cite{karli2024alchemist}. In
+vision-language-action models they act directly, mapping images and
+instructions to motor commands
+\cite{zitkovich2023rt2,kim2025openvla,black2025pi0}; surveys of foundation
+models in robotics describe the breadth of these uses
+\cite{firoozi2025foundation,kawaharazuka2024real}.
+
+Models have entered the research pipeline as well. Language and multimodal
+models have been used to annotate users' enjoyment of conversations with a
+robot \cite{pereira2024multimodal}, to conduct thematic analysis of
+interviews from an HRI study with disabled participants
+\cite{markelius2026evaluating}, to cluster and label what people disclose to
+robots \cite{chiang2025selfdisclosure}, to stand in for the participants of
+published HRI studies \cite{wachowiak2024large}, to complete HRI
+questionnaires on a robot's behalf \cite{lockwood2026when}, and to serve as
+models of human preference inside planners \cite{zhang2023largeb}.
+
+\subsection{How They Are Currently Evaluated}
+
+A systematic review of 86 LLM-driven HRI studies gives the clearest picture
+of current practice \cite{wang2026how}. Questionnaires were used in 70 of
+the 86 papers and metrics of perceptual and relational experience in 65,
+whereas metrics specific to the performance of the language model appeared
+in 30. The reviewers characterise the field as largely exploratory, with
+setups, methods, and metrics that vary widely from study to study. A second
+review, of 29 studies of LLM-powered robots, likewise finds that measured
+outcomes are mostly proximal and recommends that studies report the
+consistency of the robot's behaviour, the scope and provenance of its
+memory, and its policy for responding and refusing
+\cite{nikolova2026systematic}. In the terms we introduce in
+Section~\ref{sec:framework}, evidence in HRI is gathered predominantly at
+the level of the interaction, and measurement aimed at the model itself is
+reported in about a third of studies.
+
+Individual studies span a wide range. At one end are system demonstrations
+that report no evaluation of the model's outputs, which is appropriate to
+their purpose \cite{billing2023language,cherakara2023furchat}. In the
+middle are user studies in which the model is apparatus and the evidence
+consists of questionnaires and interviews
+\cite{kim2024understanding,rosen2024previous}. At the other end are studies
+that show what fuller evaluation looks like, and they are worth naming
+because they demonstrate that the practices proposed in this article are
+feasible within ordinary HRI research:
+
+\begin{itemize}[leftmargin=1.4em]
+\item \emph{Configuration reporting.} Some studies report a dated model
+snapshot, the temperature, and a fixed seed ``to ensure reproducibility''
+\cite{tanneberg2024help}, a full table of decoding parameters
+\cite{mishra2023realtime}, or complete prompts with the observation that
+outputs vary even at temperature zero \cite{mahadevan2024generative}. Others
+name only a product family.
+\item \emph{Coded outputs with agreement statistics.} In a study of a
+companion robot with older adults, two coders analysed the conversation
+transcripts and reported their agreement, which was moderate for topics and
+low for dialogue disruptions \cite{irfan2025between}. A study of a robot in
+a geriatric day hospital had two researchers code video independently and
+stated that no agreement statistic was computed \cite{blavette2025integrating}.
+Both are more informative than silence.
+\item \emph{Pipeline measurement.} A study of a conversational robot
+reported response latency, the language model's share of that latency, the
+deletion rate of the speech recogniser, and technical failures per turn,
+with confidence intervals, alongside usability and perception scales
+\cite{satake2026focus}. In a care home, speech recognition was 95\% accurate
+for the standard language and 45 to 56\% for regional dialects, and the
+language model restored coherence after roughly half of the misrecognitions
+\cite{pinto2025speech}; with second-language learners, the language model
+sustained task conversations despite poor transcripts
+\cite{verhelst2025large}. Fluent replies, in other words, can mask an
+upstream failure.
+\item \emph{Stress and perturbation testing.} Apparent theory-of-mind
+reasoning about robot behaviour was shown to collapse under perturbation
+tests, with ten repeated runs at each of three temperatures
+\cite{verma2024theory}; language models were audited for discrimination and
+for acceptance of harmful instructions in robot-task framings
+\cite{hundt2025llm}; and students were invited to manipulate an LLM-driven
+robot into violating stated principles \cite{abbo2025can}.
+\item \emph{Benchmarks built with stakeholders.} Caregiving scenarios
+validated by clinical stakeholders \cite{liu2026careeval}, privacy scenarios
+for home robots answered by crowd participants and by ten language models,
+whose agreement with people was generally low
+\cite{sullivan2025benchmarking}, and a benchmark of human perception for
+vision-language models that treats latency as a metric
+\cite{shi2025hribench}.
+\end{itemize}
+
+The same literature documents why the model's outputs need to be examined
+directly. Commercially available care software running on a humanoid robot
+falsely claimed that it could remind patients to take medication
+\cite{ranisch2025rapid}. Primary-school pupils interacting with LLM-powered
+tutor and peer robots that had been programmed to make noticeable mistakes
+often accepted the wrong answers \cite{rutatola2026robot}. Language models
+completing HRI questionnaires were consistent and, on one dimension,
+systematically inverted relative to people \cite{lockwood2026when}. And a
+model-generated thematic analysis of interviews with disabled participants
+agreed with the human analysis only modestly above chance, with codes that
+were semantically close to the human analysts' codes nonetheless replacing
+participants' own terms, such as \emph{ableism}, with more generic ones
+\cite{markelius2026evaluating}.
+
+\subsection{Existing Guidance}
+
+HRI has a substantial methodological literature on which this article
+builds. It includes guidance on designing, analysing, and reporting
+experiments \cite{bethel2010review,baxter2016characterising,hoffman2020primer};
+reporting guidelines for Wizard-of-Oz studies, derived from a review which
+found that only 3.7\% of such studies measured wizard error and 5.4\%
+reported wizard training \cite{riek2012wizard}; audits of statistical
+practice, which found that 4 of 144 papers applied appropriate tests to
+correctly designed rating scales \cite{schrum2023concerning} and that most
+papers reported no power analysis \cite{bartlett2022have}; analyses of
+replicability \cite{leichtmann2022crisis,gunes2022reproducibility,
+stower2026children}; reviews of who takes part in HRI studies and how that
+is reported \cite{seaborn2023not,cordero2022review}; and guidance on the
+choice of measurement scales \cite{saad2026choosing}. Standard reporting
+forms have been proposed \cite{bagchi2023towards,holthaus2025would}, and a
+consensus-based reporting checklist for HRI user studies has recently been
+produced through a Delphi process with 34 experts \cite{chandra2026rush}.
+
+Guidance specific to generative models is recent and concerns language
+models in the robot. Williams and colleagues characterised LLMs in robot
+architectures as ``Scarecrows'', black-box modules that quickly enable
+full-pipeline systems much as Wizard-of-Oz techniques do, and proposed
+initial reporting guidelines modelled on those for Wizard-of-Oz studies
+\cite{williams2024scarecrows}. A subsequent article in this journal
+identifies five groups of stakeholders in HRI research, what each needs to
+know about the use of an LLM, and suggested guidelines for what to report
+\cite{matuszek2026reporting}. Prompting guidelines with a structured
+template address how a robot's persona and limits are specified
+\cite{ashok2026why}; a framework for evaluating LLM-generated language in
+robot role-play argues that factuality-style evaluation is insufficient
+\cite{hohn2024using}; and measures have been proposed for sycophancy in
+social robots \cite{seaborn2026robotic}.
+
+The present article is complementary to this work in three respects. First,
+its subject is evaluation and not only reporting: what evidence about a
+model should be gathered, and how, before the question of how to report it
+arises. Second, it differentiates by role, on the argument that reporting
+and evaluation requirements for a model that speaks, a model that embeds,
+and a model that moves an arm are different. Third, it extends the scope
+from language models in the robot to vision-language and
+vision-language-action models, and to models used in the research pipeline
+as annotators, judges, and simulators, which existing guidance does not
+address.
+
+\subsection{Three Traditions}
+
+The practices proposed below are drawn from three bodies of methodological
+work, each of which has confronted generative models on its own terms.
+
+\emph{Natural language processing} has a long experience of evaluating
+generated text with human raters and of the weaknesses of that practice
+\cite{vanderlee2021human,howcroft2020twenty,gehrmann2023repairing}, a more
+recent and fast-growing literature on using models as judges
+\cite{zheng2023judging,gu2026survey}, and an evaluation science that has
+begun to treat the measurement of generative systems as a problem of
+validity \cite{jacobs2021measurement,wallach2025position,bean2025measuring}
+and to study interaction and not only output
+\cite{lee2023evaluating,ibrahim2025towards}.
+
+\emph{Psychology and content analysis} supply the theory and statistics of
+agreement among raters \cite{krippendorff2019content,hallgren2012computing},
+the theory of validity \cite{cronbach1955construct,messick1995validity,
+kane2013validating}, the reforms that followed the replication crisis
+\cite{opensciencecollaboration2015estimating,simmons2011falsepositive,
+nosek2018preregistration}, and, in the last three years, a critical
+literature on language models as annotators
+\cite{gilardi2023chatgpt,pangakis2023automated,baumann2025large} and as
+substitutes for human participants \cite{argyle2023out,wang2025large}.
+
+\emph{Robotics} supplies the practice of evaluating learned policies by
+physical trials and the recent effort to make that practice statistically
+sound \cite{kressgazit2024robot,agarwal2021deep}, simulation and distributed
+evaluation for generalist policies \cite{li2025evaluating,atreya2025roboarena},
+and the analysis of safety for robots controlled by language models
+\cite{robey2025jailbreaking,sermanet2025generating,hundt2025llm}.
+
+None of the three is sufficient for HRI. NLP's methods assume text read on a
+screen. Psychology's assume a human rater or a fixed instrument. Robotics'
+assume that success is a property of the task and not of the person on its
+receiving end. The framework that follows is an attempt to say which
+tradition governs which use of a model, and what must be added when the use
+is embodied and social.

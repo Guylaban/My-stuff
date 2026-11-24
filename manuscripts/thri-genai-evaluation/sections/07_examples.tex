@@ -33,12 +33,18 @@ time.
 
 \paragraph{What they already do.} The companion-robot study is, in effect, a
 failure analysis of a Speaker at system level, and it is the kind of report
-that \bpr{bp:failures} and \bpr{bp:levels} ask for. It documents disruptions
-that no text benchmark would reveal (frequent interruptions; slow,
-repetitive, superficial, and incoherent responses; language barriers;
-hallucinations; outdated information) together with their consequences for
-the people involved, who were left frustrated, confused, and worried
-\cite{irfan2025between}. The intervention study supplies what HRI
+that \bpr{bp:human}, \bpr{bp:failures}, and \bpr{bp:levels} ask for. It
+documents disruptions that no text benchmark would reveal (frequent
+interruptions; slow, repetitive, superficial, and incoherent responses;
+language barriers; hallucinations; outdated information) together with their
+consequences for the people involved, who were left frustrated, confused,
+and worried. The transcripts were analysed by two coders, the model
+snapshots are named, and the coders' agreement is reported: moderate for
+conversation topics and low for dialogue disruptions
+\cite{irfan2025between}. The low figure is itself a finding. It says that
+what counts as a disruption in conversation between an older adult and a
+robot is not something two trained people readily agree on, which bounds
+what any automated detector of disruptions could be validated against. The intervention study supplies what HRI
 conventionally provides, validated outcome measures over repeated sessions,
 and its component-level evidence was reported separately: participants'
 disclosures and the robot's responses were compared with 3{,}512 exchanges
@@ -47,13 +53,15 @@ disclosures made to the robot fell within themes found in the therapy
 corpus, whereas only 28\% of therapy disclosures fell within themes found in
 the robot corpus \cite{chiang2025talk}.
 
-\paragraph{What the practices add.} For the first study, the step from a
-qualitative catalogue of challenges to a measurement: a coded sample of
-robot turns with the frequency and severity of each failure type, two coders
-and their agreement, the distribution of response latency, and the word
-error rate of Swedish speech recognition with this population
-(\bpr{bp:human}, \bpr{bp:failures}, \bpr{bp:levels}), so that a later system
-can be shown to have improved on it. For the second, an audit of delivered
+\paragraph{What the practices add.} For the first study, little that it
+does not already point towards: the frequency and severity of each failure
+type per turn, the distribution of response latency, and the word error
+rate of Swedish speech recognition with this population
+(\bpr{bp:failures}, \bpr{bp:levels}), reported so that a later system can
+be shown to have improved on it, as a more recent study of a conversational
+robot has done with per-turn failure counts and confidence intervals
+\cite{satake2026focus}; and a sharpened codebook for disruptions, developed
+until two coders can apply it reliably. For the second, an audit of delivered
 outputs, since, by the argument of Section~\ref{sec:levels}, favourable
 outcomes cannot show that the 560 responses the robot gave were faithful to
 the reappraisal technique, accurate, and safe, and semantic proximity to
@@ -214,7 +222,9 @@ so the study is Tier~III. The intended claim is of capability and safety.
 \paragraph{What the practices ask for.} At component level, success is
 estimated from a pre-specified number of physical trials per condition, with
 exact intervals (Table~\ref{tab:cp}): thirty trials per condition are a
-minimum for a capability claim, and more for a comparison between policies
+minimum for a capability claim, and a comparison between policies calls for
+more, or for a sequential test \cite{snyder2025is}, with trials run blind to
+policy and in random order \cite{barreiros2026careful}
 (\bpr{bp:uncertainty}, \bpr{bp:trials}). Conditions are sampled along the axes that matter for the
 interaction and that manipulation benchmarks do not vary: request phrasings
 collected from residents instead of written by the researchers, seated and
@@ -226,7 +236,9 @@ whose agreement is reported; a vision-language model may be used as a success
 detector only after it has been validated against those raters as a Judge
 (\bpr{bp:human}, \bpr{bp:judge}). Failures are classified by type and by severity for the
 person, so that a dropped spectacle case and an arm that advances towards a
-face are not summed into the same failure rate (\bpr{bp:failures}).
+face are not summed into the same failure rate, and the taxonomy includes
+failures of timing such as offering the object before the person is ready
+to take it \cite{xu2026learning} (\bpr{bp:failures}).
 
 At system level, the study reports the time from the end of the request to
 the onset of motion, the behaviour of the safety layer that bounds speed and

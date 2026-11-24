@@ -4,13 +4,13 @@
 Generative models have entered human-robot interaction (HRI) by two doors.
 Through the first, they have become parts of robots. Large language models
 (LLMs) write what social robots say
-\cite{williams2024scarecrows,kim2024understanding,zhang2023large}; they and
+\cite{williams2024scarecrows,kim2024understanding,wang2026how}; they and
 their multimodal successors, vision-language models (VLMs), interpret what
 people say and do, choose what the robot should do next, and generate
 gestures, facial expressions, and programs
 \cite{mahadevan2024generative,wang2024lami}. Vision-language-action models
 (VLAs) go further and map camera images and spoken instructions directly to
-motor commands \cite{zitkovich2023rt2,kim2024openvla,black2024pi0}. Through
+motor commands \cite{zitkovich2023rt2,kim2025openvla,black2025pi0}. Through
 the second door, less noticed, the same models have become parts of the
 research apparatus: they code transcripts, score video, summarise interviews,
 judge the quality of other models' outputs, and simulate the users on whom
@@ -67,20 +67,25 @@ express \cite{abbasi2025robotled,irfan2024recommendations}. Fifth, the field's
 primary instrument is the user study, and it is tempting to let the user
 study stand in for evaluation of the model. We will argue that it cannot.
 
-There is also evidence that current practice falls short of what any of the
-inherited traditions would accept. Reviews of LLM-based HRI find that the
-model's role is often described loosely and that model versions, prompts, and
-parameters are reported inconsistently, which leaves studies impossible to
-replicate once a hosted model is withdrawn
-\cite{williams2024scarecrows,kim2024understanding,ashok2026why}. HRI has in
+There is also evidence that current practice falls short of what the
+inherited traditions would accept. A systematic review of 86 LLM-driven HRI
+studies found that questionnaires were used in 70 of them and metrics
+specific to the model's performance in 30, and characterised the field as
+largely exploratory, with widely varying setups, methods, and metrics
+\cite{wang2026how}. Reporting is uneven: some studies give a dated model
+snapshot, sampling parameters, and full prompts, and others name only a
+product, which is why reporting guidelines for LLMs in HRI have recently
+been proposed \cite{williams2024scarecrows,matuszek2026reporting,
+ashok2026why}. HRI has in
 the past identified and repaired weaknesses of this kind, in the reporting of
 Wizard-of-Oz studies \cite{riek2012wizard}, in the statistical treatment of
 rating scales \cite{schrum2023concerning}, and in replicability more broadly
 \cite{gunes2022reproducibility,leichtmann2022crisis}. Generative models are
-the next such case, and they compound the earlier ones: an LLM-driven robot
-has been aptly described as a scarecrow standing where the wizard used to be
-\cite{williams2024scarecrows}, and it is a scarecrow whose brain is rented
-from a provider that may change it without notice \cite{chen2024how}.
+the next such case, and they compound the earlier ones. LLMs in robot
+architectures have been aptly described as scarecrows, black-box modules
+that stand where the wizard used to stand \cite{williams2024scarecrows},
+and the scarecrow's brain is usually rented from a provider that may change
+it without notice \cite{chen2024how}.
 
 \paragraph{Contributions.} The article makes four contributions.
 \begin{enumerate}[leftmargin=1.6em]
@@ -95,7 +100,7 @@ psychology, or robotics from which it is adapted.
 \item A description of \emph{emerging practices} (Section~\ref{sec:emerging})
 that are new or newly feasible, several of them first tried in HRI, with an
 assessment of what each can and cannot establish.
-\item Practical instruments: three \emph{worked examples}
+\item Practical instruments: five \emph{worked examples}
 (Section~\ref{sec:examples}), \emph{precision-planning tables} for validation
 subsets and physical trials (Appendix~\ref{app:precision}), and a
 \emph{reporting checklist} with questions for reviewers
@@ -105,7 +110,7 @@ subsets and physical trials (Appendix~\ref{app:precision}), and a
 \paragraph{Scope and approach.} This is an integrative methodological review
 with recommendations, not a systematic review. We did not attempt to
 enumerate and code every HRI study that uses a generative model; recent
-reviews do that \cite{williams2024scarecrows,kim2024understanding}. We read
+systematic reviews do that \cite{wang2026how,nikolova2026systematic}. We read
 across three literatures (evaluation methodology in NLP and machine learning;
 reliability, validity, and research practice in psychology and content
 analysis; policy evaluation and safety in robotics) for practices that answer

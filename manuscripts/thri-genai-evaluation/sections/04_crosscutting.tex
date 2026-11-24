@@ -52,7 +52,14 @@ behavioural boundaries, and is therefore part of the design under study.
 Expert consultation at RO-MAN 2025 produced a template with eight functional
 components for specifying, bounding, and adapting robot behaviour through
 prompts, proposed explicitly as a reporting aid as well as a design aid
-\cite{ashok2026why}; we recommend its use. The pipeline around the model
+\cite{ashok2026why}; we recommend its use, together with the reporting
+guidelines for LLMs in HRI recently published in this journal
+\cite{matuszek2026reporting}. Good models of configuration reporting exist
+in the HRI literature: a dated snapshot with temperature and fixed seed
+\cite{tanneberg2024help}, a complete table of decoding parameters
+\cite{mishra2023realtime}, and full prompts with a named snapshot and an
+explicit note that outputs still varied at temperature zero
+\cite{mahadevan2024generative}. The pipeline around the model
 (speech recogniser, voice-activity detection, text-to-speech, the mapping from
 model output to gesture, any content filter and what the robot does when the
 filter fires) shapes what the participant experiences as much as the model
@@ -195,9 +202,9 @@ benchmark agreement against a replication of the human rating itself
 consequence of the residual disagreement for the use to which the ratings are
 put, and for that the confidence interval is as important as the point
 estimate. Table~\ref{tab:kappa} in the Appendix shows that with a hundred
-double-coded items, a common size for a validation subset in HRI, an observed
-$\kappa$ of .60 is compatible with true values from roughly .44 to .74 when
-categories are balanced, and with a much wider range when one category is
+double-coded items, a common size for a validation subset in HRI, a true
+$\kappa$ of .60 can yield estimates anywhere from roughly .44 to .74 when
+categories are balanced, and over a much wider range when one category is
 rare.
 
 \paragraph{Watch prevalence.} The categories of greatest interest in HRI are
@@ -269,10 +276,10 @@ caution. When language models were asked to reproduce participants'
 responses in three published HRI user studies, the strongest model
 correlated highly with people in two of them and no model did in the third;
 vision-capable models failed on the video stimuli; and models rated robot
-behaviour more favourably than people had \cite{wachowiak2024are}. When
+behaviour more favourably than people had \cite{wachowiak2024large}. When
 models completed standard HRI questionnaires for a set of recorded
-interactions, they agreed moderately to strongly with human observers on
-engagement and were highly consistent from run to run, yet their ratings of
+interactions, they agreed moderately to strongly with people's own ratings of
+enjoyment and satisfaction and were highly consistent from run to run, yet their ratings of
 comfort and strangeness were \emph{inversely} related to those of people
 \cite{lockwood2026when}. The second result deserves emphasis because it
 separates two things that are easily conflated: the models were reliable,
@@ -337,7 +344,10 @@ even when gender was not mentioned in the prompt \cite{abbasi2025robotled}.
 Speech recognition, which sits upstream of most spoken HRI, has well-documented
 disparities by speaker group \cite{koenecke2020racial}, and an error there
 becomes an error in everything the language model does next. HRI samples are
-small and not diverse \cite{seaborn2023not}, which limits what
+small, and their composition is rarely reported: participants' nationality
+was given in under 9\% of the studies in a review of HRI conference papers,
+and three quarters of the studies that gave a location were conducted in
+Western countries \cite{seaborn2023not}. This limits what
 disaggregation can show; but reporting the breakdown, with intervals, allows
 later synthesis, and its absence should be stated as a limitation and not
 passed over.
@@ -359,13 +369,22 @@ should therefore include, are fabricated facts and memories, claims to
 capabilities or experiences the robot does not have, loss of persona or of
 conversational context, responses that are too long or too late for spoken
 interaction, misrecognised speech treated as intended, and inappropriate
-advice \cite{irfan2025between,ashok2026why}. For action models the
+advice \cite{irfan2025between,kim2024understanding,ranisch2025rapid,
+ashok2026why}. For action models the
 corresponding list includes hesitation, motion that is successful but
 illegible or alarming, and task success achieved in a way that would be
 unacceptable around a person \cite{guan2024task}. Severity should be rated
 separately from frequency and with reference to the population: the same
 error has different weight for a student volunteer and for a person with
-dementia.
+dementia. Documented cases show why counting matters. Care software on a
+humanoid robot told users it could remind them to take medication when it
+could not \cite{ranisch2025rapid}; pupils working with LLM-powered robot
+tutors that had been made to err often accepted the wrong answers
+\cite{rutatola2026robot}; and trust fell after hallucinations for an
+embodied robot and a text assistant alike \cite{sheng2026trust}. Errors of
+excessive agreement, in which a social robot flatters or defers when it
+should not, are beginning to be given measures of their own
+\cite{seaborn2026robotic}.
 
 \subsection{Connect the Levels}
 
@@ -377,13 +396,17 @@ delivered outputs.
 \end{practice}
 
 This practice answers the two inferential leaps of
-Section~\ref{sec:levels}. Against the downward leap, it requires that
+Section~\ref{sec:levels}. Robotics offers a model of evidence gathered at
+connected levels: a multi-robot cooking system with a natural-language
+interface was evaluated first as components (180 picking episodes, 60
+motion-forecasting episodes, and 46 online evaluations of the planner by
+users) and then end to end in 60 trials \cite{wang2025mosaic}. Against the downward leap, it requires that
 outputs produced \emph{in situ} be audited, since outputs produced at the
 desk before the study are not the outputs participants heard. A generative
 model makes every participant's interaction different; the audit is the only
 means of knowing what the ``treatment'' was. It also supplies the
 manipulation check that experimental method requires
-\cite{hoffman2021primer}: if two conditions differ in a prompt intended to
+\cite{hoffman2020primer}: if two conditions differ in a prompt intended to
 make the robot more empathic, the audit should show that raters blind to
 condition find its utterances more empathic.
 
@@ -392,13 +415,29 @@ and person. Response latency is the clearest case. Gaps between turns in
 human conversation are typically a few hundred milliseconds across languages
 \cite{stivers2009universals}, and timing is central to how spoken interaction
 with machines is experienced \cite{skantze2021turn}; a pipeline of speech
-recognition, a hosted model, and speech synthesis commonly takes several
-times longer, and the delay, the filler that masks it, and the interruptions
+recognition, a hosted model, and speech synthesis is usually slower, and in
+a multi-party study of an LLM-driven robot response latency was among the
+factors that reduced the fluidity of the conversation
+\cite{abbo2026multi}. The delay, the filler that masks it, and the interruptions
 it causes are part of the stimulus. The distribution of latency, and not only
 its mean, should be reported. So should the word error rate of the speech
 recogniser in the study's acoustic conditions and with the study's
-population, since recognition errors are a leading cause of breakdown in
-LLM-driven conversation with older adults \cite{irfan2025between}.
+population. Recognition errors are a leading cause of breakdown in
+LLM-driven conversation with older adults
+\cite{irfan2024recommendations,irfan2025between}; a current recogniser
+transcribed only about 60\% of children's sentences correctly in a re-test
+of child speech recognition for HRI \cite{janssens2025child}; and in a care
+home accuracy fell from 95\% for the standard language to around half for
+regional dialects \cite{pinto2025speech}. The language model complicates
+the picture by repairing some of these errors silently: it restored
+coherence after roughly half the misrecognitions in that study, and kept
+conversations with second-language learners going on poor transcripts
+\cite{verhelst2025large}. A fluent reply is therefore no evidence that the
+robot heard what was said, and the recogniser must be measured separately
+from the model. One study that does this reports response latency, the
+model's share of it, the recogniser's deletion rate, and failures per turn
+with confidence intervals next to its questionnaire results
+\cite{satake2026focus}; we would like to see this become ordinary.
 
 Where a human supervises the robot, their interventions are data. Riek's
 guidelines for Wizard-of-Oz studies asked authors to report what the wizard
