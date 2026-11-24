@@ -133,9 +133,27 @@ situation calls for help, silence, or intervention
 executable or not) and sometimes normative (it was or was not appropriate to
 interrupt). For the normative kind, the evaluation is a comparison with
 people's decisions in the same situations, subject to everything said about
-human references above; work that elicits human explanations of why an
-action is or is not socially appropriate shows one way to build such a
-reference \cite{dogan2025grace}.
+human references above. GRACE shows what such an evaluation looks like when
+the reference is taken seriously \cite{dogan2025grace}. It predicts how
+socially appropriate each of several household actions (vacuuming, carrying
+warm food, starting a conversation) would be in a given scene, and it
+evaluates five language models, open-weight and proprietary, against
+appropriateness scores given by thousands of human annotators, using error
+and two correlation measures, one of which, the concordance correlation
+coefficient, penalises systematic offset (Table~\ref{tab:irr}). Two features
+make it an exemplar for this role. It does not treat the human scores as a
+single truth: scenes are first separated into those on which annotators
+agree and those on which they do not, and model performance is reported for
+each, which showed that the models tracked human judgement more closely
+where people agreed with one another and least closely where they did not.
+And it uses the human explanations that accompany the scores to correct the
+language model's predictions in the uncertain scenes, which improved
+agreement with human scores over the language model alone (for the
+strongest model, concordance rose from .23 to .48). The lesson for
+evaluation is general: where a Decider's task is normative, performance
+should be reported conditional on human agreement, because a model cannot be
+right about a scene on which people are divided, only more or less
+representative of them (Section~\ref{sec:perspectivist}).
 
 Two cautions apply. A model that predicts human preferences well on
 vignettes has been proposed as a zero-shot human model for planning
@@ -333,7 +351,15 @@ for the coefficients to be estimated with useful precision
 (Table~\ref{tab:kappa}). For multimodal annotation, where a vision-language
 model codes gaze, gesture, or engagement from video, the requirements are the
 same, and published validations are fewer; HRI's own experience is that such
-agreement can be modest \cite{abbasi2025robotled}.
+agreement can be modest \cite{abbasi2025robotled}. Checks of this kind are
+already made in HRI and are cheap to strengthen. In GRACE, for example, a
+language model assigned annotators' free-text explanations to categories
+that a researcher had derived from a sample of the data, and the researcher
+then hand-labelled a further 200 randomly chosen explanations, which matched
+the model's labels in 95\% of cases \cite{dogan2025grace}. That is a held-out
+check on a stated sample, reported with its size. A second human labeller
+and a chance-corrected coefficient per category would turn it into the full
+form of this practice.
 
 Not all qualitative analysis is coding against a fixed scheme. In
 interpretive approaches such as reflexive thematic analysis, the analyst's

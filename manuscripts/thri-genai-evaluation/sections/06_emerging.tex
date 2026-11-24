@@ -78,7 +78,12 @@ perspectivist programme in NLP proposes keeping the individual labels and
 evaluating against their distribution
 \cite{plank2022problem,cabitza2023toward,uma2021learning}. For HRI this suits
 constructs such as social appropriateness, politeness, and comfort, which
-vary with culture, age, and familiarity with robots.
+vary with culture, age, and familiarity with robots. The datasets needed
+already exist in part: collections of household scenes in which thousands of
+annotators scored the appropriateness of robot actions and explained their
+scores retain the spread of judgements for each scene, and GRACE uses that
+spread directly, separating scenes on which annotators agree from those on
+which they do not and treating the two differently \cite{dogan2025grace}.
 
 Three designs follow. A Perceiver or Judge can be scored by how closely the
 distribution of its labels over repeated runs or personas matches the
